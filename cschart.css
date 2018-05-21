@@ -69,3 +69,111 @@ path {
   stroke-width: 2;
   fill: none;
 }
+
+.list-inline-item {
+    display: inline-block;
+}
+
+.list-inline select{
+        border: none;
+    padding: 0;
+    background: none;
+    color: #190430;
+    font-weight: 600;
+    height: auto !important;
+    width: auto;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    color: #fff;
+    background-color: #07B0BB;
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
+    border: 2px solid #07B0BB;
+    padding: 2px;
+    box-shadow: inset 0px 0px 0px 2px #fff;
+    border-radius: 1px;
+}
+.custom-control-label::after {
+    position: absolute;
+    top: 0.34375rem;
+    left: 0;
+    display: block;
+    width: 0.8125rem;
+    height: 0.8125rem;
+    content: "";
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 50% 50%;
+}
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
+    background-image: none;
+}
+
+.custom-control-input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+.custom-control {
+    position: relative;
+    display: block;
+    min-height: 1.5rem;
+    padding-left: 1.5rem;
+}
+.custom-checkbox .custom-control-label::before {
+    background: none;
+    border: 2px solid rgba(25, 4, 48, 0.3);
+}
+
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #07B0BB;
+}
+
+fieldset{
+    border: 0;
+}
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label {
+    color: #07B0BB;
+}
+.custom-control-label {
+    color: #76767C;
+}
+.custom-checkbox .custom-control-label {
+    vertical-align: middle;
+}
+
+.custom-checkbox .custom-control-label::before {
+    background: none;
+    border: 2px solid rgba(25, 4, 48, 0.3);
+}
+.custom-checkbox .custom-control-label::before {
+    border-radius: 1px;
+}
+.custom-control-label::before {
+    position: absolute;
+    top: 0.34375rem;
+    left: 0;
+    display: block;
+    width: 0.8125rem;
+    height: 0.8125rem;
+    pointer-events: none;
+    content: "";
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #dee2e6;
+}
+
+.custom-control-inline {
+    display: -webkit-inline-box;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    margin-right: 1rem;
+}
