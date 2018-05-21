@@ -80,10 +80,10 @@ function changeClass() {
 function displayCS() {
     var chart       = cschart().Bheight(460);
     d3.select("#chart1").call(chart);
-    var chart       = barchart().mname("volume").margin(320).MValue("TURNOVER");
+    var chart       = barchart().mname("volume").margin(380).MValue("TURNOVER");
     d3.select("#chart1").datum(genData).call(chart);
-    var chart       = barchart().mname("sigma").margin(400).MValue("VOLATILITY");
-    d3.select("#chart1").datum(genData).call(chart);
+    // var chart       = barchart().mname("sigma").margin(400).MValue("VOLATILITY");
+    // d3.select("#chart1").datum(genData).call(chart);
     hoverAll();
 }
 
@@ -108,6 +108,6 @@ function hoverAll() {
 }
 
 function displayGen(mark) {
-    var header      = csheader();
-    d3.select("#infobar").datum(genData.slice(mark)[0]).call(header);
+    // var header      = csheader();
+    // d3.select("#infobar").datum(genData.slice(mark)[0]).call(header);
 }

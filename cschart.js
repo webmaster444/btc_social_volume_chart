@@ -1,7 +1,7 @@
 function cschart() {
 
     var margin = {top: 0, right: 30, bottom: 40, left: 5},
-        width = 620, height = 300, Bheight = 460;
+        width = 620, height = 440, Bheight = 460;
 
     function csrender(selection) {
       selection.each(function() {

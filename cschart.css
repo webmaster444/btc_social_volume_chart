@@ -9,38 +9,36 @@
     color: #333; }
 
 #csbox {
-    color: #fff; 
-    background: #292f3b;
+    color: #fff;     
     margin: 10px auto; 
     width: 670px;
     height: 500px;
     font-size: small;
     text-align: center; }
-
 /* Candlestick Chart
 /* =============================================== */
 #chart1 .grid { stroke-opacity: .3; }
 #chart1 .axis line,
 #chart1 .axis.xaxis path { fill: none; stroke: darkgrey; shape-rendering: crispEdges; }
 #chart1 .tick text { font: 10px sans-serif; fill: darkgrey; stroke-opacity: .3; }
-#chart1 .axis.yaxis path { fill: none; stroke: #292f3b; }
+#chart1 .axis.yaxis path { fill: none; stroke: #292f3b; display: none}
 
-#chart1 .bands rect { fill: darkgrey; fill-opacity: 0; stroke-opacity: 0; pointer-events: all; shape-rendering: crispEdges; }
+#chart1 .bands rect { fill: #c8d6d6; fill-opacity: 0; stroke-opacity: 0; pointer-events: all; shape-rendering: crispEdges; }
 #chart1 .bands .hoved { fill-opacity: .6; }
 #chart1 .sticks rect { pointer-events: none; shape-rendering: crispEdges; }
-#chart1 .sticks .rise, #chart1 .candles .rise { fill: lightgrey; } 
-#chart1 .sticks .fall, #chart1 .candles .fall { fill: turquoise; }
-#chart1 .sticks .hoved { stroke: white; }
-#chart1 .candles .hoved { stroke: white; }
+#chart1 .sticks .rise, #chart1 .candles .rise { fill: #bec07a; } 
+#chart1 .sticks .fall, #chart1 .candles .fall { fill: #fc6a42; }
+/*#chart1 .sticks .hoved { stroke: white; }
+#chart1 .candles .hoved { stroke: white; }*/
 #chart1 .candles rect { pointer-events: none; shape-rendering: crispEdges; }
 
 #chart1 .bbmn { fill: none; stroke: cyan; stroke-width: 1.5px; pointer-events: none; }
 #chart1 .bbup { fill: none; stroke: green; stroke-width: 1.5px; pointer-events: none; }
 #chart1 .bbdn { fill: none; stroke: crimson; stroke-width: 1.5px; pointer-events: none; }
 
-#chart1 .volumebar { fill: darkgrey; } 
+#chart1 .volumebar { fill: #c8d6d6; } 
 #chart1 .volumebar rect { pointer-events: none; }
-#chart1 .volumebar .hoved { fill: white; }
+/*#chart1 .volumebar .hoved { fill: white; }*/
 #chart1 .sigmabar { fill: darkgrey; } 
 #chart1 .sigmabar rect { pointer-events: none; }
 #chart1 .sigmabar .hoved { fill: white; }
