@@ -177,3 +177,26 @@ fieldset{
     display: inline-flex;
     margin-right: 1rem;
 }
+
+.btn-group input[type="radio"]{
+        position: absolute;
+    clip: rect(0, 0, 0, 0);
+    pointer-events: none;
+}
+
+.btn-group label{
+        position: relative;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 1 auto;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+    color: #76767C;
+    font-weight: 600;
+}
+
+.btn-link:hover {
+    color: #2f2681;
+    text-decoration: underline;
+    background-color: transparent;
+    border-color: transparent;
+}
