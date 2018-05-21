@@ -82,8 +82,8 @@ function displayCS() {
     d3.select("#chart1").call(chart);
     var chart       = barchart().mname("volume").margin(380).MValue("TURNOVER");
     d3.select("#chart1").datum(genData).call(chart);
-    // var chart       = barchart().mname("sigma").margin(400).MValue("VOLATILITY");
-    // d3.select("#chart1").datum(genData).call(chart);
+    var chart       = linechart().mname("sigma").margin(0).MValue("VOLATILITY");
+    d3.select("#chart1").datum(genData).call(chart);
     hoverAll();
 }
 

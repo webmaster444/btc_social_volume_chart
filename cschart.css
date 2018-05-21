@@ -63,3 +63,9 @@
 #volchart .volbar .volfill { fill: crimson; } 
 #volchart .sigbar .sigfill { fill: crimson; } 
 #volchart input { cursor: pointer; }
+
+path { 
+  stroke: steelblue;
+  stroke-width: 2;
+  fill: none;
+}
