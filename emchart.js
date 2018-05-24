@@ -1,11 +1,11 @@
-function linechart() {
+function emachart() {
 
   var margin = {top: 300, right: 30, bottom: 10, left: 5 },
       width = 620, height = 430, mname = "mbar1";  
   
   var MValue = "PV";
-  var period = 12;
-  function linerender(selection) {    
+
+  function emalinerender(selection) {    
     selection.each(function(data) {
   
       var x = d3.scale.ordinal()
@@ -27,7 +27,8 @@ function linechart() {
          .attr('class','linechart_wrapper')
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
       
-      x.domain(data.map(function(d) { return d.Date; }));      
+      x.domain(data.map(function(d) { return d.Date; }));
+      // y.domain([0, d3.max(data, function(d) { return d[MValue]; })]).nice();
       y.domain(d3.extent(data, function(d) { return d[MValue]; })).nice();
 
   
@@ -46,49 +47,34 @@ function linechart() {
   
       var barwidth    = x.rangeBand();
       var fillwidth   = (Math.floor(barwidth*0.9)/2)*2+1;
-      var bardelta    = Math.round((barwidth-fillwidth)/2);
-  console.log(bardelta);
-  var valueline = d3.svg.line()
-  .x(function(d) { return x(d.Date) + bardelta; })
-  .y(function(d) { return y(d[MValue]); });
+      var bardelta    = Math.round((barwidth-fillwidth)/2);  
 
-      // var mbar = svg.selectAll("."+mname+"bar")
-      //     .data([data])
-      //   .enter().append("g")
-      //     .attr("class", mname+"bar");
+      var valueline = d3.svg.line()
+      .x(function(d) { return x(d.Date) + bardelta; })
+      .y(function(d) { return y(d[MValue]); });    
   
     svg.append("path")  
     .attr("class", "line")
-    .attr("d", valueline(data));
-
-      // mbar.selectAll("rect")
-      //     .data(function(d) { return d; })
-      //   .enter().append("rect")
-      //     .attr("class", mname+"fill")
-      //     .attr("x", function(d) { return x(d.Date) + bardelta; })
-      //     .attr("y", function(d) { return y(d[MValue]); })
-      //     .attr("class", function(d, i) { return mname+i; })
-      //     .attr("height", function(d) { return y(0) - y(d[MValue]); })
-      //     .attr("width", fillwidth);
+    .attr("d", valueline(data));    
     });
-  } // linerender
-  linerender.mname = function(value) {
+  } // emalinerender
+  emalinerender.mname = function(value) {
           	if (!arguments.length) return mname;
           	mname = value;
-          	return linerender;
+          	return emalinerender;
       	};
 
-  linerender.margin = function(value) {
+  emalinerender.margin = function(value) {
           	if (!arguments.length) return margin.top;
           	margin.top = value;
-          	return linerender;
+          	return emalinerender;
       	};
 
-  linerender.MValue = function(value) {
+  emalinerender.MValue = function(value) {
           	if (!arguments.length) return MValue;
           	MValue = value;
-          	return linerender;
+          	return emalinerender;
       	};
 
-return linerender;
+return emalinerender;
 } // linechart

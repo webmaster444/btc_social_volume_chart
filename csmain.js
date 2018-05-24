@@ -6,18 +6,8 @@ var TFormat      = {"day":"%d", "week":"%d %b '%y", "month":"%b '%y" };
 var genRaw, genData;
     
 (function() {
-    // d3.csv("stockdata.csv", genType, function(data) {
-    //   genRaw         = data;
-    //   console.log(genRaw);
-    //   mainjs();
-    // }); 
-
-    d3.json("api_data2.json",function(error,data){    
-    // console.log(data);
-    // console.log(typeof data);
-    //   data = data.slice(data.length - 125, data.length);      
-        data.forEach(function(d){
-          // console.log(d);
+    d3.json("api_data2.json",function(error,data){        
+        data.forEach(function(d){          
             d.Date  = Date.parse(d.Date);
             d.Low        = +d.Low;
             d.High       = +d.High; 
@@ -27,9 +17,7 @@ var genRaw, genData;
             d.PV         = +d.PV;
             d.PS         = +d.PS;
             d.NV         = +d.NV;
-            d.TV         = +d.TV;
-            // d.Turnover   = +d.TURNOVER;
-            // d.VOLATILITY = +d.VOLATILITY;            
+            d.TV         = +d.TV;            
         })              
         genRaw = data;
         mainjs();        
@@ -139,6 +127,13 @@ function hoverAll() {
           });
 }
 
+function calcema(period,data){
+  10-period sum / 10; 
+
+Multiplier: (2 / (Time periods + 1) ) = (2 / (10 + 1) ) = 0.1818 (18.18%);
+
+EMA: {Close - EMA(previous day)} x multiplier + EMA(previous day)
+}
 function displayGen(mark) {
     // var header      = csheader();
     // d3.select("#infobar").datum(genData.slice(mark)[0]).call(header);

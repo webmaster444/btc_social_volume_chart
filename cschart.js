@@ -21,12 +21,16 @@ function cschart() {
         
         var parseDate = d3.time.format(TFormat[interval]);
         function tickFormat1(d){
-            return parseDate(new Date(d));
+            if (parseDate(new Date(d)) % 5 == 0 ) return parseDate(new Date(d));
+            return "";
         }
 
         var xAxis = d3.svg.axis()
             .scale(x);
             // .tickFormat(tickFormat1);
+
+var ticksFilter = x.domain().filter(function(d,i){ console.log(i);return !(i%10); } );
+
 
         var yAxis = d3.svg.axis()
             .scale(y)
@@ -52,7 +56,7 @@ function cschart() {
         svg.append("g")
             .attr("class", "axis xaxis")
             .attr("transform", "translate(0," + height + ")")
-            .call(xAxis.orient("bottom").tickValues(5).tickFormat(tickFormat1).outerTickSize(0));
+            .call(xAxis.orient("bottom").tickFormat(tickFormat1).outerTickSize(0));
     
         svg.append("g")
             .attr("class", "axis yaxis")
