@@ -128,11 +128,11 @@ function hoverAll() {
 }
 
 function calcema(period,data){
-  10-period sum / 10; 
+//   10-period sum / 10; 
 
-Multiplier: (2 / (Time periods + 1) ) = (2 / (10 + 1) ) = 0.1818 (18.18%);
+// Multiplier: (2 / (Time periods + 1) ) = (2 / (10 + 1) ) = 0.1818 (18.18%);
 
-EMA: {Close - EMA(previous day)} x multiplier + EMA(previous day)
+// EMA: {Close - EMA(previous day)} x multiplier + EMA(previous day)
 }
 function displayGen(mark) {
     // var header      = csheader();
