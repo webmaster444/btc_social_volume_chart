@@ -2,14 +2,44 @@ var parseDate    = d3.time.format("%Y-%m-%d").parse;
 var TPeriod      = "3M";
 var TDays        = {"1M":21, "3M":63, "6M":126, "1Y":252, "2Y":504, "4Y":1008 };
 var TIntervals   = {"1M":"day", "3M":"day", "6M":"day", "1Y":"week", "2Y":"week", "4Y":"month" };
-var TFormat      = {"day":"%d %b '%y", "week":"%d %b '%y", "month":"%b '%y" };
+var TFormat      = {"day":"%d", "week":"%d %b '%y", "month":"%b '%y" };
 var genRaw, genData;
     
 (function() {
-    d3.csv("stockdata.csv", genType, function(data) {
-      genRaw         = data;
-      mainjs();
-    }); 
+    // d3.csv("stockdata.csv", genType, function(data) {
+    //   genRaw         = data;
+    //   console.log(genRaw);
+    //   mainjs();
+    // }); 
+
+    d3.json("api_data2.json",function(error,data){    
+    // console.log(data);
+    // console.log(typeof data);
+    //   data = data.slice(data.length - 125, data.length);      
+        data.forEach(function(d){
+          // console.log(d);
+            d.Date  = Date.parse(d.Date);
+            d.Low        = +d.Low;
+            d.High       = +d.High; 
+            d.Open       = +d.Open;
+            d.Close      = +d.Close;
+            d.Volume     = +d.Volume;
+            d.PV         = +d.PV;
+            d.PS         = +d.PS;
+            d.NV         = +d.NV;
+            d.TV         = +d.TV;
+            // d.Turnover   = +d.TURNOVER;
+            // d.VOLATILITY = +d.VOLATILITY;            
+        })              
+        genRaw = data;
+        mainjs();        
+    });
+
+    $('#linechart_select').change(function(){
+      $('svg g.linechart_wrapper').remove();
+      var chart = linechart().mname("sigma").margin(0).MValue($(this).val());
+      d3.select("#chart1").datum(genData).call(chart);
+    });
 }());
 
 function toSlice(data) { return data.slice(-TDays[TPeriod]); }
@@ -80,9 +110,11 @@ function changeClass() {
 function displayCS() {
     var chart       = cschart().Bheight(460);
     d3.select("#chart1").call(chart);
-    var chart       = barchart().mname("volume").margin(380).MValue("TURNOVER");
+
+    var chart       = barchart().mname("volume").margin(380).MValue("Volume");
     d3.select("#chart1").datum(genData).call(chart);
-    var chart       = linechart().mname("sigma").margin(0).MValue("VOLATILITY");
+
+    var chart       = linechart().mname("sigma").margin(0).MValue("NV");
     d3.select("#chart1").datum(genData).call(chart);
     hoverAll();
 }

@@ -3,13 +3,14 @@ function cschart() {
     var margin = {top: 0, right: 30, bottom: 40, left: 5},
         width = 620, height = 440, Bheight = 460;
 
-    function csrender(selection) {
+    function csrender(selection) {        
       selection.each(function() {
      
-        var interval = TIntervals[TPeriod];
 
-        var minimal  = d3.min(genData, function(d) { return d.LOW; });
-        var maximal  = d3.max(genData, function(d) { return d.HIGH; });
+        var interval = TIntervals[TPeriod];        
+
+        var minimal  = d3.min(genData, function(d) { return d.Low; });
+        var maximal  = d3.max(genData, function(d) { return d.High; });
 
         var extRight = width + margin.right
         var x = d3.scale.ordinal()
@@ -18,24 +19,29 @@ function cschart() {
         var y = d3.scale.linear()
             .rangeRound([height, 0]);
         
+        var parseDate = d3.time.format(TFormat[interval]);
+        function tickFormat1(d){
+            return parseDate(new Date(d));
+        }
+
         var xAxis = d3.svg.axis()
-            .scale(x)
-            .tickFormat(d3.time.format(TFormat[interval]));
-        
+            .scale(x);
+            // .tickFormat(tickFormat1);
+
         var yAxis = d3.svg.axis()
             .scale(y)
             .ticks(Math.floor(height/50));
 
-        x.domain(genData.map(function(d) { return d.TIMESTAMP; }));
+        x.domain(genData.map(function(d) { return d.Date; }));
         y.domain([minimal, maximal]).nice();
     
-        var xtickdelta   = Math.ceil(60/(width/genData.length))
-        xAxis.tickValues(x.domain().filter(function(d, i) { return !((i+Math.floor(xtickdelta/2)) % xtickdelta); }));
+        // var xtickdelta   = Math.ceil(60/(width/genData.length))
+        // xAxis.tickValues(x.domain().filter(function(d, i) { return !((i+Math.floor(xtickdelta/2)) % xtickdelta); }));
     
         var barwidth    = x.rangeBand();
         var candlewidth = Math.floor(d3.min([barwidth*0.8, 13])/2)*2+1;
         var delta       = Math.round((barwidth-candlewidth)/2);
-    
+            
         d3.select(this).select("svg").remove();
         var svg = d3.select(this).append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -46,7 +52,7 @@ function cschart() {
         svg.append("g")
             .attr("class", "axis xaxis")
             .attr("transform", "translate(0," + height + ")")
-            .call(xAxis.orient("bottom").outerTickSize(0));
+            .call(xAxis.orient("bottom").tickValues(5).tickFormat(tickFormat1).outerTickSize(0));
     
         svg.append("g")
             .attr("class", "axis yaxis")
@@ -66,7 +72,7 @@ function cschart() {
         bands.selectAll("rect")
             .data(function(d) { return d; })
           .enter().append("rect")
-            .attr("x", function(d) { return x(d.TIMESTAMP) + Math.floor(barwidth/2); })
+            .attr("x", function(d) { return x(d.Date) + Math.floor(barwidth/2); })
             .attr("y", 0)
             .attr("height", Bheight)
             .attr("width", 1)
@@ -81,13 +87,13 @@ function cschart() {
         stick.selectAll("rect")
             .data(function(d) { return d; })
           .enter().append("rect")
-            .attr("x", function(d) { return x(d.TIMESTAMP) + Math.floor(barwidth/2); })
-            .attr("y", function(d) { return y(d.HIGH); })
+            .attr("x", function(d) { return x(d.Date) + Math.floor(barwidth/2); })
+            .attr("y", function(d) { return y(d.High); })
             .attr("class", function(d, i) { return "stick"+i; })
-            .attr("height", function(d) { return y(d.LOW) - y(d.HIGH); })
+            .attr("height", function(d) { return y(d.Low) - y(d.High); })
             .attr("width", 1)
-            .classed("rise", function(d) { return (d.CLOSE>d.OPEN); })
-            .classed("fall", function(d) { return (d.OPEN>d.CLOSE); });
+            .classed("rise", function(d) { return (d.Close>d.Open); })
+            .classed("fall", function(d) { return (d.Open>d.Close); });
     
         var candle = svg.selectAll(".candles")
             .data([genData])
@@ -97,13 +103,13 @@ function cschart() {
         candle.selectAll("rect")
             .data(function(d) { return d; })
           .enter().append("rect")
-            .attr("x", function(d) { return x(d.TIMESTAMP) + delta; })
-            .attr("y", function(d) { return y(d3.max([d.OPEN, d.CLOSE])); })
+            .attr("x", function(d) { return x(d.Date) + delta; })
+            .attr("y", function(d) { return y(d3.max([d.Open, d.Close])); })
             .attr("class", function(d, i) { return "candle"+i; })
-            .attr("height", function(d) { return y(d3.min([d.OPEN, d.CLOSE])) - y(d3.max([d.OPEN, d.CLOSE])); })
+            .attr("height", function(d) { return y(d3.min([d.Open, d.Close])) - y(d3.max([d.Open, d.Close])); })
             .attr("width", candlewidth)
-            .classed("rise", function(d) { return (d.CLOSE>d.OPEN); })
-            .classed("fall", function(d) { return (d.OPEN>d.CLOSE); });
+            .classed("rise", function(d) { return (d.Close>d.Open); })
+            .classed("fall", function(d) { return (d.Open>d.Close); });
 
       });
     } // csrender

@@ -3,9 +3,10 @@ function barchart() {
   var margin = {top: 300, right: 30, bottom: 10, left: 5 },
       width = 620, height = 60, mname = "mbar1";
   
-  var MValue = "TURNOVER";
+  var MValue = "Volume";
   
   function barrender(selection) {
+    var MValue = "Volume";
     selection.each(function(data) {
   
       var x = d3.scale.ordinal()
@@ -25,9 +26,9 @@ function barchart() {
       var svg = d3.select(this).select("svg")
          .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-      
-      x.domain(data.map(function(d) { return d.TIMESTAMP; }));
-      y.domain([0, d3.max(data, function(d) { return d[MValue]; })]).nice();
+
+      x.domain(data.map(function(d) { return d.Date; }));
+      y.domain([0, d3.max(data, function(d) {return d["Volume"]; })]).nice();
   
       var xtickdelta   = Math.ceil(60/(width/data.length))
       xAxis.tickValues(x.domain().filter(function(d, i) { return !((i+Math.floor(xtickdelta/2)) % xtickdelta); }));
@@ -55,7 +56,7 @@ function barchart() {
           .data(function(d) { return d; })
         .enter().append("rect")
           .attr("class", mname+"fill")
-          .attr("x", function(d) { return x(d.TIMESTAMP) + bardelta; })
+          .attr("x", function(d) { return x(d.Date) + bardelta; })
           .attr("y", function(d) { return y(d[MValue]); })
           .attr("class", function(d, i) { return mname+i; })
           .attr("height", function(d) { return y(0) - y(d[MValue]); })

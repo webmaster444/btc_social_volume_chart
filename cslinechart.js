@@ -1,11 +1,11 @@
 function linechart() {
 
   var margin = {top: 300, right: 30, bottom: 10, left: 5 },
-      width = 620, height = 430, mname = "mbar1";
+      width = 620, height = 430, mname = "mbar1";  
   
-  var MValue = "TURNOVER";
-  
-  function linerender(selection) {
+  var MValue = "PV";
+
+  function linerender(selection) {    
     selection.each(function(data) {
   
       var x = d3.scale.ordinal()
@@ -24,9 +24,10 @@ function linechart() {
       
       var svg = d3.select(this).select("svg")
          .append("g")
+         .attr('class','linechart_wrapper')
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
       
-      x.domain(data.map(function(d) { return d.TIMESTAMP; }));
+      x.domain(data.map(function(d) { return d.Date; }));
       // y.domain([0, d3.max(data, function(d) { return d[MValue]; })]).nice();
       y.domain(d3.extent(data, function(d) { return d[MValue]; })).nice();
 
@@ -49,7 +50,7 @@ function linechart() {
       var bardelta    = Math.round((barwidth-fillwidth)/2);
   
   var valueline = d3.svg.line()
-  .x(function(d) { return x(d.TIMESTAMP) + bardelta; })
+  .x(function(d) { return x(d.Date) + bardelta; })
   .y(function(d) { return y(d[MValue]); });
 
       // var mbar = svg.selectAll("."+mname+"bar")
@@ -65,7 +66,7 @@ function linechart() {
       //     .data(function(d) { return d; })
       //   .enter().append("rect")
       //     .attr("class", mname+"fill")
-      //     .attr("x", function(d) { return x(d.TIMESTAMP) + bardelta; })
+      //     .attr("x", function(d) { return x(d.Date) + bardelta; })
       //     .attr("y", function(d) { return y(d[MValue]); })
       //     .attr("class", function(d, i) { return mname+i; })
       //     .attr("height", function(d) { return y(0) - y(d[MValue]); })
