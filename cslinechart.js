@@ -58,7 +58,7 @@ function linechart() {
       //     .attr("class", mname+"bar");
   
     svg.append("path")  
-    .attr("class", mname+"line")
+    .attr("class", mname+"line line")
     .attr("d", valueline(data));
 
       // mbar.selectAll("rect")

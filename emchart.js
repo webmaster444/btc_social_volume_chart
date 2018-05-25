@@ -46,7 +46,7 @@ function emachart() {
       .y(function(d) { return y(d.ema); });    
   
     svg.append("path")  
-    .attr("class", mname+"line")
+    .attr("class", mname+"line line")
     .attr("d", valueline(data));    
     });
   } // emalinerender

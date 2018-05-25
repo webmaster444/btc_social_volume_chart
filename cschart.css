@@ -207,3 +207,5 @@ fieldset{
 .nvline{stroke:#fc7a7a;}
 .tvline{stroke:#9fb0ba;}
 .ema_chart{display: none;}
+
+.line:hover{stroke-width:2px;}
