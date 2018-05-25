@@ -4,7 +4,8 @@ var TDays        = {"1M":21, "3M":63, "6M":126, "1Y":252, "2Y":504, "4Y":1008 };
 var TIntervals   = {"1M":"day", "3M":"day", "6M":"day", "1Y":"week", "2Y":"week", "4Y":"month" };
 var TFormat      = {"day":"%d", "week":"%d %b '%y", "month":"%b '%y" };
 var genRaw, genData;
-    
+var ema12,ema26  = [];
+
 (function() {
     d3.json("api_data2.json",function(error,data){        
         data.forEach(function(d){          
@@ -20,14 +21,17 @@ var genRaw, genData;
             d.TV         = +d.TV;            
         })              
         genRaw = data;
-        mainjs();        
+        ema12 = calcema(12,genRaw);
+        ema26 = calcema(26,genRaw);
+        mainjs();                
     });
 
     $('#linechart_select').change(function(){
       $('svg g.linechart_wrapper').remove();
-      var chart = linechart().mname("sigma").margin(0).MValue($(this).val());
+      var chart = linechart().mname($(this).val().toLowerCase()).margin(0).MValue($(this).val());
       d3.select("#chart1").datum(genData).call(chart);
     });
+    
 }());
 
 function toSlice(data) { return data.slice(-TDays[TPeriod]); }
@@ -102,8 +106,16 @@ function displayCS() {
     var chart       = barchart().mname("volume").margin(380).MValue("Volume");
     d3.select("#chart1").datum(genData).call(chart);
 
-    var chart       = linechart().mname("sigma").margin(0).MValue("NV");
+    var chart       = linechart().mname("ps").margin(0).MValue("PS");
     d3.select("#chart1").datum(genData).call(chart);
+    hoverAll();
+    
+    var chart       = emachart().mname("ema12").margin(0);
+    d3.select("#chart1").datum(ema12).call(chart);
+
+    var chart       = emachart().mname("ema26").margin(0);
+    d3.select("#chart1").datum(ema26).call(chart);    
+
     hoverAll();
 }
 
@@ -127,14 +139,37 @@ function hoverAll() {
           });
 }
 
-function calcema(period,data){
-//   10-period sum / 10; 
-
-// Multiplier: (2 / (Time periods + 1) ) = (2 / (10 + 1) ) = 0.1818 (18.18%);
-
+function calcema(period,data){  
+  var index = 0;
+var isum = d3.sum(data,function(d){++index; if(index<=period) {return d.Close}});
+var isma = isum / period;
+var multiplier = (2/(period+1));
 // EMA: {Close - EMA(previous day)} x multiplier + EMA(previous day)
+var emares = [];
+
+var tmp = new Object;
+    tmp['Date'] = data[0]['Date'];
+    tmp['ema']  = isma;
+
+  emares.push(tmp);
+
+    for(var i=1;i<data.length;i++){
+      var tmp_arr = new Object;
+      tmp_arr['Date'] = data[i]['Date'];
+      var tmp_ema = (data[i]['Close'] - emares[i-1]['ema'])*multiplier + emares[i-1]['ema'];
+      tmp_arr['ema'] = tmp_ema;
+      emares.push(tmp_arr);
+    }    
+
+  return emares;
 }
 function displayGen(mark) {
     // var header      = csheader();
     // d3.select("#infobar").datum(genData.slice(mark)[0]).call(header);
 }
+
+$('.custom-control-input').change(function(){
+  var clicked = $(this).val();
+  var tmpStr = '.ema_chart.ema_chart_wrapper_'+clicked;
+  $(tmpStr).toggle();
+})

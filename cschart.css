@@ -200,3 +200,10 @@ fieldset{
     background-color: transparent;
     border-color: transparent;
 }
+
+.ema12line{stroke:#70b0bb;}
+.ema26line{stroke:#e29eda;}
+.psline{stroke:#8cc176;}
+.nvline{stroke:#fc7a7a;}
+.tvline{stroke:#9fb0ba;}
+.ema_chart{display: none;}

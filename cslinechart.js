@@ -3,11 +3,11 @@ function linechart() {
   var margin = {top: 300, right: 30, bottom: 10, left: 5 },
       width = 620, height = 430, mname = "mbar1";  
   
-  var MValue = "PV";
-  var period = 12;
+  var MValue = "PV";  
   function linerender(selection) {    
     selection.each(function(data) {
   
+  console.log(data);
       var x = d3.scale.ordinal()
           .rangeBands([0, width]);
       
@@ -46,10 +46,10 @@ function linechart() {
   
       var barwidth    = x.rangeBand();
       var fillwidth   = (Math.floor(barwidth*0.9)/2)*2+1;
-      var bardelta    = Math.round((barwidth-fillwidth)/2);
-  console.log(bardelta);
+      var bardelta    = Math.round((barwidth-fillwidth)/2);  
+
   var valueline = d3.svg.line()
-  .x(function(d) { return x(d.Date) + bardelta; })
+  .x(function(d) { return x(d.Date) + barwidth/2; })
   .y(function(d) { return y(d[MValue]); });
 
       // var mbar = svg.selectAll("."+mname+"bar")
@@ -58,7 +58,7 @@ function linechart() {
       //     .attr("class", mname+"bar");
   
     svg.append("path")  
-    .attr("class", "line")
+    .attr("class", mname+"line")
     .attr("d", valueline(data));
 
       // mbar.selectAll("rect")
