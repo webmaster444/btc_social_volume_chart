@@ -137,6 +137,13 @@ function hoverAll() {
               d3.select(".sigma"+i).classed("hoved", false);
               displayGen(genData.length-1);
           });
+
+    d3.select('#chart1').selectAll('path').on('mouseover',function(d,i){      
+        d3.select(this).style('stroke-width','4px');
+        console.log(d3.select(this));
+    }).on('mouseout',function(d,i){
+        d3.select(this).style('stroke-width','2px');
+    });
 }
 
 function calcema(period,data){  
