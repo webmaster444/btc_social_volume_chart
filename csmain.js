@@ -30,6 +30,12 @@ var ema12,ema26  = [];
       $('svg g.linechart_wrapper').remove();
       var chart = linechart().mname($(this).val().toLowerCase()).margin(0).MValue($(this).val());
       d3.select("#chart1").datum(genData).call(chart);
+    d3.select('#chart1').selectAll('path').on('mouseover',function(d,i){      
+      console.log('asdfdsf');
+        d3.select(this).style('stroke-width','4px');        
+    }).on('mouseout',function(d,i){
+        d3.select(this).style('stroke-width','2px');
+    });
     });
     
 }());
@@ -107,8 +113,7 @@ function displayCS() {
     d3.select("#chart1").datum(genData).call(chart);
 
     var chart       = linechart().mname("ps").margin(0).MValue("PS");
-    d3.select("#chart1").datum(genData).call(chart);
-    hoverAll();
+    d3.select("#chart1").datum(genData).call(chart);    
     
     var chart       = emachart().mname("ema12").margin(0);
     d3.select("#chart1").datum(ema12).call(chart);
@@ -139,8 +144,8 @@ function hoverAll() {
           });
 
     d3.select('#chart1').selectAll('path').on('mouseover',function(d,i){      
-        d3.select(this).style('stroke-width','4px');
-        console.log(d3.select(this));
+      console.log('asdfdsf');
+        d3.select(this).style('stroke-width','4px');        
     }).on('mouseout',function(d,i){
         d3.select(this).style('stroke-width','2px');
     });
