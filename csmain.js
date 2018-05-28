@@ -7,7 +7,9 @@ var genRaw, genData;
 var ema12,ema26  = [];
 
 (function() {
-    d3.json("api_data2.json",function(error,data){        
+  var url = "https://dev.decryptz.com/api/v1/charts/dashboard?symbol=btc&interval=day&startDate=2018-04-01%2000:00:00&endDate=2018-05-28%2000:00:00";
+  d3.json(url,function(error,data){        
+    // d3.json("api_data2.json",function(error,data){        
         data.forEach(function(d){          
             d.Date  = Date.parse(d.Date);
             d.Low        = +d.Low;
@@ -53,7 +55,7 @@ function mainjs() {
 }
 
 function displayAll() {
-    changeClass();
+    // changeClass();
     displayCS();
     displayGen(genData.length-1);
 }
@@ -104,7 +106,7 @@ function changeClass() {
     }
 }
 
-function displayCS() {
+function displayCS() {    
     var chart       = cschart().Bheight(460);
     d3.select("#chart1").call(chart);
 
@@ -120,6 +122,11 @@ function displayCS() {
     var chart       = emachart().mname("ema26").margin(0);
     d3.select("#chart1").datum(ema26).call(chart);    
 
+    if(genData[0].hasOwnProperty('IP')){
+      var chart       = linechart().mname("ip").margin(0).MValue("IP");
+      d3.select("#chart1").datum(genData).call(chart);    
+    }
+        
     hoverAll();
 }
 
@@ -187,7 +194,8 @@ $('.custom-control-input').change(function(){
   }
 })
 
-$('input[type=radio][name=view]').change(function() {
+$('input[type=radio][name=view]').change(function() {  
+  var interval = '';
   $('#period').html('');  
   if($(this).val()=='1m'){  
   $('#period').append('<option value="1h">1h</option>');
@@ -195,21 +203,51 @@ $('input[type=radio][name=view]').change(function() {
   $('#period').append('<option value="6h">6h</option>');
   $('#period').append('<option value="1d">1d</option>');
   $('.implied_price').css('display','none');
+  interval = "minute";
 }else if($(this).val()=="1h"){
   $('#period').append('<option value="1d">1d</option>');
   $('#period').append('<option value="1w">1w</option>');
   $('#period').append('<option value="2w">2w</option>');
   $('#period').append('<option value="1m">1m</option>');
   $('.implied_price').css('display','none');
+  interval = "hour";
 }else if($(this).val()=="1d"){
   $('#period').append('<option value="1w">1w</option>');
   $('#period').append('<option value="1m">1m</option>');
   $('#period').append('<option value="6m">6m</option>');
   $('#period').append('<option value="1y">1y</option>');
   $('.implied_price').css('display','inline-block');
-  var chart       = linechart().mname("ip").margin(0).MValue("IP");
-  d3.select("#chart1").datum(genData).call(chart);    
-  $('.linechart_wrapper.ip').hide();
-  hoverAll();
+  interval = "day";
 }
+  var startDate = "2018-05-01%2000:00:00";
+  var endDate = "2018-05-27%2000:00:00";
+  if(interval =='minute'){
+    startDate = "2018-05-25%2000:00:00";
+  }else if(interval =='hour'){
+    startDate = "2018-04-01%2000:00:00";
+  }else if(interval =='day'){
+    startDate = "2018-04-01%2000:00:00";
+  }
+  var url = "https://dev.decryptz.com/api/v1/charts/dashboard?symbol=btc&interval="+interval+"&startDate="+startDate+"&endDate="+endDate;
+  
+    d3.json(url,function(error,data){        
+      $('#chart1').empty();
+    // d3.json("api_data2.json",function(error,data){        
+        data.forEach(function(d){          
+            d.Date  = Date.parse(d.Date);
+            d.Low        = +d.Low;
+            d.High       = +d.High; 
+            d.Open       = +d.Open;
+            d.Close      = +d.Close;
+            d.Volume     = +d.Volume;
+            d.PV         = +d.PV;
+            d.PS         = +d.PS;
+            d.NV         = +d.NV;
+            d.TV         = +d.TV;            
+        })              
+        genRaw = data;
+        ema12 = calcema(12,genRaw);
+        ema26 = calcema(26,genRaw);
+        mainjs();                
+    });
 });

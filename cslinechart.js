@@ -6,8 +6,7 @@ function linechart() {
   var MValue = "PV";  
   function linerender(selection) {    
     selection.each(function(data) {
-  
-  console.log(data);
+    
       var x = d3.scale.ordinal()
           .rangeBands([0, width]);
       
