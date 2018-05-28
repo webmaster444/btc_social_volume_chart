@@ -5,7 +5,15 @@ function cschart() {
 
     function csrender(selection) {        
       selection.each(function() {
-     
+        
+    // var time_scale_x = d3.time.scale()
+    // .domain(d3.map(function()))
+    // .range([0, width]);
+
+    var zoom = d3.behavior.zoom()
+        .x(time_scale_x)
+        .xExtent([new Date(-2000, 1, 1), new Date(3000, 1, 1)])
+        .on("zoom", zoomed);
 
         var interval = TIntervals[TPeriod];        
 
