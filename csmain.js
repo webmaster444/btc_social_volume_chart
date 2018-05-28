@@ -30,8 +30,7 @@ var ema12,ema26  = [];
       $('svg g.linechart_wrapper').remove();
       var chart = linechart().mname($(this).val().toLowerCase()).margin(0).MValue($(this).val());
       d3.select("#chart1").datum(genData).call(chart);
-    d3.select('#chart1').selectAll('path').on('mouseover',function(d,i){      
-      console.log('asdfdsf');
+      d3.select('#chart1').selectAll('path').on('mouseover',function(d,i){            
         d3.select(this).style('stroke-width','4px');        
     }).on('mouseout',function(d,i){
         d3.select(this).style('stroke-width','2px');
@@ -143,8 +142,7 @@ function hoverAll() {
               displayGen(genData.length-1);
           });
 
-    d3.select('#chart1').selectAll('path').on('mouseover',function(d,i){      
-      console.log('asdfdsf');
+    d3.select('#chart1').selectAll('path').on('mouseover',function(d,i){            
         d3.select(this).style('stroke-width','4px');        
     }).on('mouseout',function(d,i){
         d3.select(this).style('stroke-width','2px');
@@ -153,11 +151,10 @@ function hoverAll() {
 
 function calcema(period,data){  
   var index = 0;
-var isum = d3.sum(data,function(d){++index; if(index<=period) {return d.Close}});
-var isma = isum / period;
-var multiplier = (2/(period+1));
-// EMA: {Close - EMA(previous day)} x multiplier + EMA(previous day)
-var emares = [];
+  var isum = d3.sum(data,function(d){++index; if(index<=period) {return d.Close}});
+  var isma = isum / period;
+  var multiplier = (2/(period+1));
+  var emares = [];
 
 var tmp = new Object;
     tmp['Date'] = data[0]['Date'];
@@ -180,8 +177,39 @@ function displayGen(mark) {
     // d3.select("#infobar").datum(genData.slice(mark)[0]).call(header);
 }
 
-$('.custom-control-input').change(function(){
-  var clicked = $(this).val();
-  var tmpStr = '.ema_chart.ema_chart_wrapper_'+clicked;
-  $(tmpStr).toggle();
+$('.custom-control-input').change(function(){  
+  if($(this).val()!="implied_price"){
+    var clicked = $(this).val();  
+    var tmpStr = '.ema_chart.ema_chart_wrapper_'+clicked;
+    $(tmpStr).toggle();
+  }else{
+    $('.linechart_wrapper.ip').toggle();
+  }
 })
+
+$('input[type=radio][name=view]').change(function() {
+  $('#period').html('');  
+  if($(this).val()=='1m'){  
+  $('#period').append('<option value="1h">1h</option>');
+  $('#period').append('<option value="3h">3h</option>');
+  $('#period').append('<option value="6h">6h</option>');
+  $('#period').append('<option value="1d">1d</option>');
+  $('.implied_price').css('display','none');
+}else if($(this).val()=="1h"){
+  $('#period').append('<option value="1d">1d</option>');
+  $('#period').append('<option value="1w">1w</option>');
+  $('#period').append('<option value="2w">2w</option>');
+  $('#period').append('<option value="1m">1m</option>');
+  $('.implied_price').css('display','none');
+}else if($(this).val()=="1d"){
+  $('#period').append('<option value="1w">1w</option>');
+  $('#period').append('<option value="1m">1m</option>');
+  $('#period').append('<option value="6m">6m</option>');
+  $('#period').append('<option value="1y">1y</option>');
+  $('.implied_price').css('display','inline-block');
+  var chart       = linechart().mname("ip").margin(0).MValue("IP");
+  d3.select("#chart1").datum(genData).call(chart);    
+  $('.linechart_wrapper.ip').hide();
+  hoverAll();
+}
+});

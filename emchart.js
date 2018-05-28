@@ -1,7 +1,7 @@
 function emachart() {
 
-  var margin = {top: 300, right: 30, bottom: 10, left: 5 },
-      width = 620, height = 430, mname = "mbar1";  
+  var margin = {top: 300, right: 50, bottom: 10, left: 5 },
+      width = 920, height = 430, mname = "mbar1";  
     
   function emalinerender(selection) {    
     selection.each(function(data) {
@@ -48,6 +48,13 @@ function emachart() {
     svg.append("path")  
     .attr("class", mname+"line line")
     .attr("d", valueline(data));    
+
+    var indicator_g = svg.append('g').attr('class','indicator_g').attr('transform',"translate(" + (width - 10) +","+(y(data[data.length-1].ema) -7 ) +")");
+    
+    indicator_g.append('svg').attr('viewBox',"0 0 65 15").attr("enable-background","new 0 0 65 15").attr('xml:space',"preserve");
+    indicator_g.append('path').attr("d","M65.1,0H11C8.2,0,6.8,0.7,4.5,2.7L0,7.2l4.3,4.6c0,0,3,3.2,6.5,3.2H65L65.1,0L65.1,0z").attr('class',mname+'_indicator');
+    indicator_g.append('text').attr('x',12).attr('y',0).attr('dy','1em').text(data[data.length-1].ema.toFixed(2));
+
     });
   } // emalinerender
   emalinerender.mname = function(value) {
@@ -61,12 +68,6 @@ function emachart() {
           	margin.top = value;
           	return emalinerender;
       	};
-
-  // emalinerender.MValue = function(value) {
-  //         	if (!arguments.length) return MValue;
-  //         	MValue = value;
-  //         	return emalinerender;
-  //     	};
 
 return emalinerender;
 } // emachart

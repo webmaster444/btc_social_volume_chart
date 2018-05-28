@@ -4,14 +4,13 @@
     margin: auto; 
     min-height: 310px; 
     min-width: 700px; 
-    max-width: 800px; 
+    max-width: 1000px; 
     padding-left: 30px; 
     color: #333; }
 
 #csbox {
     color: #fff;     
-    margin: 10px auto; 
-    width: 670px;
+    margin: 10px auto;     
     height: 500px;
     font-size: small;
     text-align: center; }
@@ -134,8 +133,12 @@ path {
     background-color: #07B0BB;
 }
 
+fieldset:focus{
+    outline: none;
+}
 fieldset{
     border: 0;
+    outline: none;
 }
 .custom-checkbox .custom-control-input:checked ~ .custom-control-label {
     color: #07B0BB;
@@ -204,8 +207,29 @@ fieldset{
 .ema12line{stroke:#70b0bb;}
 .ema26line{stroke:#e29eda;}
 .psline{stroke:#8cc176;}
+.pvline{stroke:#8cc176;}
 .nvline{stroke:#fc7a7a;}
 .tvline{stroke:#9fb0ba;}
+.ipline{stroke:#FAEFBD;}
 .ema_chart{display: none;}
 
 .line:hover{stroke-width:2px;}
+
+*,*:focus, *:hover{
+    outline:none;
+}
+.indicator_g text{
+    fill: white;    
+}
+.ps_indicator{stroke: #8cc176;fill:#8cc176;}
+.nv_indicator{stroke: #fc7a7a;fill:#fc7a7a;}
+.pv_indicator{stroke: #8cc176;fill:#8cc176;}
+.tv_indicator{stroke: #9fb0ba;fill:#9fb0ba;}
+.ema12_indicator{stroke: #70b0bb;fill:#70b0bb;}
+.ema26_indicator{stroke: #e29eda;fill: #e29eda;}
+.ohlc_indicator{stroke:#fc6a42;fill: #fc6a42;}
+.ip_indicator{stroke:#FAEFBD;fill: #FAEFBD;}
+
+legend{color: black;}
+
+.implied_price{display: none;}

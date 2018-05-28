@@ -1,7 +1,7 @@
 function barchart() {
 
-  var margin = {top: 300, right: 30, bottom: 10, left: 5 },
-      width = 620, height = 60, mname = "mbar1";
+  var margin = {top: 300, right: 50, bottom: 10, left: 5 },
+      width = 920, height = 60, mname = "mbar1";
   
   var MValue = "Volume";
   

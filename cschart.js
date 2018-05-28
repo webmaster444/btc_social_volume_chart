@@ -1,7 +1,7 @@
 function cschart() {
 
-    var margin = {top: 0, right: 30, bottom: 40, left: 5},
-        width = 620, height = 440, Bheight = 460;
+    var margin = {top: 0, right: 50, bottom: 40, left: 5},
+        width = 920, height = 440, Bheight = 460;
 
     function csrender(selection) {        
       selection.each(function() {
@@ -114,6 +114,12 @@ var ticksFilter = x.domain().filter(function(d,i){ console.log(i);return !(i%10)
             .attr("width", candlewidth)
             .classed("rise", function(d) { return (d.Close>d.Open); })
             .classed("fall", function(d) { return (d.Open>d.Close); });
+
+    var indicator_g = svg.append('g').attr('class','indicator_g').attr('transform',"translate(" + (width) +","+(y(genData[genData.length-1].Close) -7 ) +")");
+    
+    indicator_g.append('svg').attr('viewBox',"0 0 65 15").attr("enable-background","new 0 0 65 15").attr('xml:space',"preserve");
+    indicator_g.append('path').attr("d","M65.1,0H11C8.2,0,6.8,0.7,4.5,2.7L0,7.2l4.3,4.6c0,0,3,3.2,6.5,3.2H65L65.1,0L65.1,0z").attr('class','ohlc_indicator');
+    indicator_g.append('text').attr('x',12).attr('y',0).attr('dy','1em').text(genData[genData.length-1].Close.toFixed(0));
 
       });
     } // csrender
