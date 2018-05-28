@@ -6,10 +6,10 @@ function cschart() {
     function csrender(selection) {        
       selection.each(function() {
         
-    // var time_scale_x = d3.time.scale()
-    // .domain(d3.map(function()))
-    // .range([0, width]);
-
+    var time_scale_x = d3.time.scale()
+        .domain(genData.map(function(d){return d.Date}))
+        .range([0, width]);
+        
     var zoom = d3.behavior.zoom()
         .x(time_scale_x)
         .xExtent([new Date(-2000, 1, 1), new Date(3000, 1, 1)])
@@ -32,6 +32,10 @@ function cschart() {
             if (parseDate(new Date(d)) % 5 == 0 ) return parseDate(new Date(d));
             return "";
         }
+
+    var timedxAxis = d3.svg.axis()
+        .scale(time_scale_x)
+        .orient("bottom");        
 
         var xAxis = d3.svg.axis()
             .scale(x);
@@ -59,12 +63,13 @@ var ticksFilter = x.domain().filter(function(d,i){ console.log(i);return !(i%10)
             .attr("width", width + margin.left + margin.right)
             .attr("height", Bheight + margin.top + margin.bottom)
           .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")").call(zoom);
         
         svg.append("g")
             .attr("class", "axis xaxis")
             .attr("transform", "translate(0," + height + ")")
-            .call(xAxis.orient("bottom").tickFormat(tickFormat1).outerTickSize(0));
+            .call(xAxis.orient("bottom").tickFormat(tickFormat1));
+                // .outerTickSize(0));
     
         svg.append("g")
             .attr("class", "axis yaxis")
@@ -74,7 +79,8 @@ var ticksFilter = x.domain().filter(function(d,i){ console.log(i);return !(i%10)
         svg.append("g")
             .attr("class", "axis grid")
             .attr("transform", "translate(" + width + ",0)")
-            .call(yAxis.orient("left").tickFormat("").tickSize(width).outerTickSize(0));
+            .call(yAxis.orient("left").tickFormat("").tickSize(width));
+                // .outerTickSize(0));
     
         var bands = svg.selectAll(".bands")
             .data([genData])
@@ -129,8 +135,14 @@ var ticksFilter = x.domain().filter(function(d,i){ console.log(i);return !(i%10)
     indicator_g.append('path').attr("d","M65.1,0H11C8.2,0,6.8,0.7,4.5,2.7L0,7.2l4.3,4.6c0,0,3,3.2,6.5,3.2H65L65.1,0L65.1,0z").attr('class','ohlc_indicator');
     indicator_g.append('text').attr('x',12).attr('y',0).attr('dy','1em').text(genData[genData.length-1].Close.toFixed(0));
 
+function zoomed() {
+    svg.select(".x.axis").call(timedxAxis);
+    console.log(timedxAxis.scale().domain());    
+}
+
       });
     } // csrender
+
 
     csrender.Bheight = function(value) {
             	if (!arguments.length) return Bheight;
