@@ -237,3 +237,9 @@ legend{color: black;}
 svg{
     cursor: crosshair;
 }
+
+rect.pane{
+    cursor: crosshair;
+    fill: none;
+    pointer-events: all;
+}
