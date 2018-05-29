@@ -251,3 +251,10 @@ rect.pane{
 .ps.linechart_wrapper{
     display: block;
 }
+
+g.sticks,g.candles, g.volumebar{
+    clip-path: url(#clip);
+}
+path.line{
+    clip-path: url(#clip);
+}

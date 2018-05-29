@@ -15,7 +15,7 @@ function cschart() {
 
             var x = d3.time.scale()
                 .domain([startDomain, endDomain])
-                .range([width / genData.length / 2, width - width / genData.length / 2]);            
+                .range([width / genData.length / 2, (width - width / genData.length / 2 )]);            
 
             var zoom = d3.behavior.zoom()
                 .x(x)
@@ -35,8 +35,12 @@ function cschart() {
 
             var extRight = width + margin.right            
 
+            // y axis 
             var y = d3.scale.linear()
                 .rangeRound([height, 0]);
+
+            // tmp_y axis for pan functionality
+            var tmp_y = d3.scale.linear().rangeRound([height, 0]);
 
             var parseDate = d3.time.format(TFormat[interval]);      
 
@@ -49,13 +53,14 @@ function cschart() {
 
             y.domain([minimal, maximal]).nice();
 
-            // var valueline = d3.svg.line()
-            //   .x(function(d) { return x(d.Date) + barwidth/2; })
-            //   .y(function(d) { console.log(y(d['PV']));return y(d['PV']); });
-
             var barwidth = width / genData.length;
             var candlewidth = Math.floor(d3.min([barwidth * 0.8, 13]) / 2) * 2 + 1;
             var delta = Math.round((barwidth - candlewidth) / 2);
+
+            var valuelinepv = d3.svg.line().x(function(d) {return x(d.Date) + barwidth / 2;}).y(function(d) {return tmp_y(d['PV']);});
+            var valuelinetv = d3.svg.line().x(function(d) {return x(d.Date) + barwidth / 2;}).y(function(d) {return tmp_y(d['TV']);});
+            var valuelinenv = d3.svg.line().x(function(d) {return x(d.Date) + barwidth / 2;}).y(function(d) {return tmp_y(d['NV']);});
+            var valuelineps = d3.svg.line().x(function(d) {return x(d.Date) + barwidth / 2;}).y(function(d) {return tmp_y(d['PS']);});
 
             d3.select(this).select("svg").remove();
             var svg = d3.select(this).append("svg")
@@ -64,11 +69,16 @@ function cschart() {
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+        svg.append("defs").append("clipPath")
+            .attr("id", "clip")
+            .append("rect")
+            .attr("width", width)
+            .attr("height", height);
+
             svg.append("g")
                 .attr("class", "axis xaxis")
                 .attr("transform", "translate(0," + height + ")")
-                .call(xAxis.orient("bottom"));
-            // .outerTickSize(0));
+                .call(xAxis.orient("bottom"));            
 
             svg.append("g")
                 .attr("class", "axis yaxis")
@@ -78,8 +88,7 @@ function cschart() {
             svg.append("g")
                 .attr("class", "axis grid")
                 .attr("transform", "translate(" + width + ",0)")
-                .call(yAxis.orient("left").tickFormat("").tickSize(width));
-            // .outerTickSize(0));
+                .call(yAxis.orient("left").tickFormat("").tickSize(width));            
 
             var bands = svg.selectAll(".bands")
                 .data([genData])
@@ -187,10 +196,19 @@ function cschart() {
                 d3.selectAll('.volume').data(genData).attr("x", function(d) {
                     return x(d.Date) + delta
                 });
+                
+                tmp_y.domain(d3.extent(genData, function(d) {return d['PV'];})).nice();
+                d3.selectAll(".pvline")                     
+                    .attr("d", valuelinepv(genData));
 
-                // d3.selectAll(".line")
-                //      // set the new data
-                //     .attr("d", valueline(genData));
+                tmp_y.domain(d3.extent(genData, function(d) {return d['PS'];})).nice();
+                d3.selectAll(".psline").attr("d", valuelineps(genData));
+
+                tmp_y.domain(d3.extent(genData, function(d) {return d['TV'];})).nice();
+                d3.selectAll(".tvline").attr("d", valuelinetv(genData));
+
+                tmp_y.domain(d3.extent(genData, function(d) {return d['NV'];})).nice();
+                d3.selectAll(".nvline").attr("d", valuelinenv(genData));
             }
 
         });

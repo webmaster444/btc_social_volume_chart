@@ -55,14 +55,9 @@ if (period == "1w") {
     });
 
     $('#linechart_select').change(function() {
-        $('svg g.linechart_wrapper').remove();
-        var chart = linechart().mname($(this).val().toLowerCase()).margin(0).MValue($(this).val());
-        d3.select("#chart1").datum(genData).call(chart);
-        d3.select('#chart1').selectAll('path').on('mouseover', function(d, i) {
-            d3.select(this).style('stroke-width', '4px');
-        }).on('mouseout', function(d, i) {
-            d3.select(this).style('stroke-width', '2px');
-        });
+      $('.linechart_wrapper').hide();
+      var tmpClass = "."+$(this).val().toLowerCase() +".linechart_wrapper";
+      $(tmpClass).show();
     });
 
 }());
