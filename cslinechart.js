@@ -7,15 +7,25 @@ function linechart() {
   function linerender(selection) {    
     selection.each(function(data) {
     
-      var x = d3.scale.ordinal()
-          .rangeBands([0, width]);
+      var x = d3.time.scale()
+          .domain([startDomain, endDomain])
+          .range([width / genData.length / 2, width - width / genData.length / 2]);            
+
+      // var zoom = d3.behavior.zoom()
+      //     .x(x)
+      //     .xExtent(d3.extent(genData, function(d) {
+      //         return d.Date
+      //     }))
+      //     .on("zoom", zoomed);
+
+      // var x = d3.scale.ordinal()
+      //     .rangeBands([0, width]);
       
       var y = d3.scale.linear()
           .rangeRound([height, 0]);
       
       var xAxis = d3.svg.axis()
-          .scale(x)
-          .tickFormat(d3.time.format(TFormat[TIntervals[TPeriod]]));
+          .scale(x);          
       
       var yAxis = d3.svg.axis()
           .scale(y)
@@ -26,7 +36,7 @@ function linechart() {
          .attr('class','linechart_wrapper '+mname)
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
       
-      x.domain(data.map(function(d) { return d.Date; }));      
+      // x.domain(data.map(function(d) { return d.Date; }));      
       y.domain(d3.extent(data, function(d) { return d[MValue]; })).nice();
 
   
@@ -43,7 +53,7 @@ function linechart() {
 //          .attr("transform", "translate(0,0)")
 //          .call(yAxis.orient("left"));
   
-      var barwidth    = x.rangeBand();
+      var barwidth = width / genData.length;
       var fillwidth   = (Math.floor(barwidth*0.9)/2)*2+1;
       var bardelta    = Math.round((barwidth-fillwidth)/2);  
 

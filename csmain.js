@@ -26,6 +26,12 @@ var ema12, ema26 = [];
 var startDate = "2018-05-01T00:00:00";
 var endDate = "2018-05-27T00:00:00";
 var period = "1w";
+var endDomain = Date.parse(endDate);
+var startDomain = Date.parse(startDate);
+if (period == "1w") {
+    var timestamp = 1000 * 60 * 60 * 24 * 7;
+    startDomain = endDomain - timestamp;
+}
 (function() {
     var url = "https://dev.decryptz.com/api/v1/charts/dashboard?symbol=btc&interval=day&startDate=2018-04-01%2000:00:00&endDate=2018-05-28%2000:00:00";
     d3.json(url, function(error, data) {
@@ -70,89 +76,12 @@ function mainjs() {
         genData = (TIntervals[TPeriod] != "day") ? dataCompress(toSlice(genRaw), TIntervals[TPeriod]) : toSlice(genRaw);
     };
     toPress();
-    displayAll();
-    d3.select("#oneM").on("click", function() {
-        TPeriod = "1M";
-        toPress();
-        displayAll();
-    });
-    d3.select("#threeM").on("click", function() {
-        TPeriod = "3M";
-        toPress();
-        displayAll();
-    });
-    d3.select("#sixM").on("click", function() {
-        TPeriod = "6M";
-        toPress();
-        displayAll();
-    });
-    d3.select("#oneY").on("click", function() {
-        TPeriod = "1Y";
-        toPress();
-        displayAll();
-    });
-    d3.select("#twoY").on("click", function() {
-        TPeriod = "2Y";
-        toPress();
-        displayAll();
-    });
-    d3.select("#fourY").on("click", function() {
-        TPeriod = "4Y";
-        toPress();
-        displayAll();
-    });
+    displayAll();    
 }
 
-function displayAll() {
-    // changeClass();
+function displayAll() {    
     displayCS();
     displayGen(genData.length - 1);
-}
-
-function changeClass() {
-    if (TPeriod == "1M") {
-        d3.select("#oneM").classed("active", true);
-        d3.select("#threeM").classed("active", false);
-        d3.select("#sixM").classed("active", false);
-        d3.select("#oneY").classed("active", false);
-        d3.select("#twoY").classed("active", false);
-        d3.select("#fourY").classed("active", false);
-    } else if (TPeriod == "6M") {
-        d3.select("#oneM").classed("active", false);
-        d3.select("#threeM").classed("active", false);
-        d3.select("#sixM").classed("active", true);
-        d3.select("#oneY").classed("active", false);
-        d3.select("#twoY").classed("active", false);
-        d3.select("#fourY").classed("active", false);
-    } else if (TPeriod == "1Y") {
-        d3.select("#oneM").classed("active", false);
-        d3.select("#threeM").classed("active", false);
-        d3.select("#sixM").classed("active", false);
-        d3.select("#oneY").classed("active", true);
-        d3.select("#twoY").classed("active", false);
-        d3.select("#fourY").classed("active", false);
-    } else if (TPeriod == "2Y") {
-        d3.select("#oneM").classed("active", false);
-        d3.select("#threeM").classed("active", false);
-        d3.select("#sixM").classed("active", false);
-        d3.select("#oneY").classed("active", false);
-        d3.select("#twoY").classed("active", true);
-        d3.select("#fourY").classed("active", false);
-    } else if (TPeriod == "4Y") {
-        d3.select("#oneM").classed("active", false);
-        d3.select("#threeM").classed("active", false);
-        d3.select("#sixM").classed("active", false);
-        d3.select("#oneY").classed("active", false);
-        d3.select("#twoY").classed("active", false);
-        d3.select("#fourY").classed("active", true);
-    } else {
-        d3.select("#oneM").classed("active", false);
-        d3.select("#threeM").classed("active", true);
-        d3.select("#sixM").classed("active", false);
-        d3.select("#oneY").classed("active", false);
-        d3.select("#twoY").classed("active", false);
-        d3.select("#fourY").classed("active", false);
-    }
 }
 
 function displayCS() {
@@ -163,6 +92,15 @@ function displayCS() {
     d3.select("#chart1").datum(genData).call(chart);
 
     var chart = linechart().mname("ps").margin(0).MValue("PS");
+    d3.select("#chart1").datum(genData).call(chart);
+
+    var chart = linechart().mname("pv").margin(0).MValue("PV");
+    d3.select("#chart1").datum(genData).call(chart);
+
+    var chart = linechart().mname("nv").margin(0).MValue("NV");
+    d3.select("#chart1").datum(genData).call(chart);
+
+    var chart = linechart().mname("tv").margin(0).MValue("TV");
     d3.select("#chart1").datum(genData).call(chart);
 
     var chart = emachart().mname("ema12").margin(0);

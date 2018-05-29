@@ -243,3 +243,11 @@ rect.pane{
     fill: none;
     pointer-events: all;
 }
+
+.linechart_wrapper{
+    display: none;
+}
+
+.ps.linechart_wrapper{
+    display: block;
+}
