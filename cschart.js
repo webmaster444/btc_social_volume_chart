@@ -61,6 +61,8 @@ function cschart() {
             var valuelinetv = d3.svg.line().x(function(d) {return x(d.Date) + barwidth / 2;}).y(function(d) {return tmp_y(d['TV']);});
             var valuelinenv = d3.svg.line().x(function(d) {return x(d.Date) + barwidth / 2;}).y(function(d) {return tmp_y(d['NV']);});
             var valuelineps = d3.svg.line().x(function(d) {return x(d.Date) + barwidth / 2;}).y(function(d) {return tmp_y(d['PS']);});
+            var valuelineema12 = d3.svg.line().x(function(d) {return x(d.Date) + barwidth / 2;}).y(function(d) {return tmp_y(d['ema']);});
+            var valuelineema26 = d3.svg.line().x(function(d) {return x(d.Date) + barwidth / 2;}).y(function(d) {return tmp_y(d['ema']);});
 
             d3.select(this).select("svg").remove();
             var svg = d3.select(this).append("svg")
@@ -209,6 +211,12 @@ function cschart() {
 
                 tmp_y.domain(d3.extent(genData, function(d) {return d['NV'];})).nice();
                 d3.selectAll(".nvline").attr("d", valuelinenv(genData));
+
+                tmp_y.domain(d3.extent(ema12, function(d) {return d['ema'];})).nice();
+                d3.selectAll(".ema12line").attr("d", valuelineema12(ema12));
+
+                tmp_y.domain(d3.extent(ema26, function(d) {return d['ema'];})).nice();
+                d3.selectAll(".ema26line").attr("d", valuelineema26(ema26));
             }
 
         });
