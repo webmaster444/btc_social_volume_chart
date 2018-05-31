@@ -12,6 +12,7 @@ function cschart() {
 
     function csrender(selection) {
         selection.each(function() {
+            var parseDate = d3.time.format("%d-%b");
 
             var x = d3.time.scale()
                 .domain([startDomain, endDomain])
@@ -24,6 +25,8 @@ function cschart() {
                 }))
                 .on("zoom", zoomed);
             
+            var bisectDate = d3.bisector(function(d) { return d.Date; }).left;
+
             var minimal = d3.min(genData, function(d) {
                 return d.Low;
             });
@@ -48,10 +51,9 @@ function cschart() {
 
             // var barwidth = width / genData.length;
 
-            var tmp_divider = TCount[period][interval]; 
-            console.log(tmp_divider);
+            var tmp_divider = TCount[period][interval];             
             var barwidth = width / tmp_divider;
-            // var candlewidth = Math.floor(d3.min([barwidth * 0.8, 13]) / 2) * 2 + 1;
+            
             var candlewidth = (Math.floor(barwidth * 0.9) / 2) * 2 + 1;            
             var delta = Math.round((barwidth - candlewidth) / 2);
 
@@ -177,12 +179,49 @@ function cschart() {
             indicator_g.append('path').attr("d", "M65.1,0H11C8.2,0,6.8,0.7,4.5,2.7L0,7.2l4.3,4.6c0,0,3,3.2,6.5,3.2H65L65.1,0L65.1,0z").attr('class', 'ohlc_indicator');
             indicator_g.append('text').attr('x', 12).attr('y', 0).attr('dy', '1em').text(genData[genData.length - 1].Close.toFixed(0));
 
+            var focus_g = svg.append('g').attr('class', 'focus_g').attr('transform', "translate(" + (width) + "," + (y(genData[genData.length - 1].Close) - 7) + ")").style('display','none');
+
+            focus_g.append('svg').attr('viewBox', "0 0 65 15").attr("enable-background", "new 0 0 65 15").attr('xml:space', "preserve");
+            focus_g.append('path').attr("d", "M65.1,0H11C8.2,0,6.8,0.7,4.5,2.7L0,7.2l4.3,4.6c0,0,3,3.2,6.5,3.2H65L65.1,0L65.1,0z").attr('class', 'focus_indicator');
+            focus_g.append('text').attr('x', 12).attr('y', 0).attr('dy', '1em').text("ttt");
+
+            var x_move_wrapper = svg.append('g').attr('class','x_wrapper').style('display','none');
+
+            var x_move_rect = x_move_wrapper.append("rect").attr("class",'x_move_rect')
+                            .attr("x", -35)
+                            .attr("y", 2)
+                            .attr('rx',5)
+                            .attr("width", 70)
+                            .attr("height", 20);
+            x_move_wrapper.append('text').attr('x',0).attr('y',15).attr('dy',".1em").style('color','white').text('asdf');
+
+            var x_line = svg.append('line').attr('class','x_grid_line').attr('x1',0).attr('y1',0).attr('x2',0).attr('y2',height).style('display','none');
+            var y_line = svg.append('line').attr('class','y_grid_line').attr('x1',0).attr('y1',0).attr('x2',width).attr('y2',0).style('display','none');
             var rect = d3.select("#chart1 svg").append("svg:rect")
                 .attr("class", "pane")
                 .attr("width", width)
                 .attr("height", height)
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")      
+                .on("mouseover", function() { focus_g.style("display", null); x_move_wrapper.style("display",null);
+                    x_line.style('display',null);y_line.style('display',null)
+                })
+                .on("mouseout", function() { focus_g.style("display", "none"); x_move_wrapper.style("display","none");
+                    x_line.style('display','none');y_line.style('display','none')
+                })
+                .on("mousemove", mousemove)
                 .call(zoom).on("wheel.zoom", null);
+
+              function mousemove() {
+                var x0 = x.invert(d3.mouse(this)[0]);
+                var y0 = y.invert(d3.mouse(this)[1]);
+            
+                focus_g.attr("transform", "translate(" + width + "," + (d3.mouse(this)[1]-7) + ")");
+                x_move_wrapper.attr('transform',"translate("+d3.mouse(this)[0]+","+height+")");
+                x_line.attr('x1',d3.mouse(this)[0]).attr('x2',d3.mouse(this)[0]);
+                y_line.attr('y1',d3.mouse(this)[1]).attr('y2',d3.mouse(this)[1]);
+                x_move_wrapper.select('text').text(parseDate(x0));
+                focus_g.select("text").text(y0);
+              }
 
             function zoomed() {
                 svg.select(".xaxis").call(xAxis);
