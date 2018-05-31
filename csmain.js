@@ -7,27 +7,6 @@ var endDomain = Date.parse(endDate);
 var startDomain = Date.parse(startDate);
 var timestampduration = 0;
 var interval='hour';
-var TDays = {
-    "1M": 21,
-    "3M": 63,
-    "6M": 126,
-    "1Y": 252,
-    "2Y": 504,
-    "4Y": 1008
-};
-var TIntervals = {
-    "1M": "day",
-    "3M": "day",
-    "6M": "day",
-    "1Y": "week",
-    "2Y": "week",
-    "4Y": "month"
-};
-var TFormat = {
-    "day": "%d",
-    "minute": "%m %h %d",
-    "hour": "%H %d"
-};
 
 var TCount = {
     "1w": {"day":8,"hour":24 * 7},
@@ -185,6 +164,7 @@ $('.custom-control-input').change(function() {
     }
 })
 
+//Trigger redraw when view radio button is clicked
 $('input[type=radio][name=view]').change(function() {    
     $('#period').html('');
     $('#radioes2 label').removeClass('active');
@@ -213,15 +193,16 @@ $('input[type=radio][name=view]').change(function() {
         interval = "day";
         period = "1m";
     }
+    $('#checkboxes2 input[type="checkbox"]').prop('checked', false);
     changeDomain(period);
     $(this).parent().addClass('active');
-    if (interval == 'minute') {
-        startDate = "2018-05-25T00:00:00";
-    } else if (interval == 'hour') {
-        startDate = "2018-04-01T00:00:00";
-    } else if (interval == 'day') {
-        startDate = "2018-04-01T00:00:00";
-    }
+    // if (interval == 'minute') {
+    //     startDate = "2018-05-25T00:00:00";
+    // } else if (interval == 'hour') {
+    //     startDate = "2018-04-01T00:00:00";
+    // } else if (interval == 'day') {
+    //     startDate = "2018-04-01T00:00:00";
+    // }
     var url = "https://dev.decryptz.com/api/v1/charts/dashboard?symbol=btc&interval=" + interval + "&startDate=" + startDate + "&endDate=" + endDate;
 
     d3.json(url, function(error, data) {
@@ -247,9 +228,11 @@ $('input[type=radio][name=view]').change(function() {
 
 document.getElementById('chart1').onwheel = function(){ return false; }
 
+// trigger redraw when period selector is changed
 $(document).on("change", "#period", function() {
     period = $(this).val();
     changeDomain(period);        
     $('#chart1').empty();        
     mainjs();    
+    $('#checkboxes2 input[type="checkbox"]').prop('checked', false);
 });

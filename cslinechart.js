@@ -33,8 +33,7 @@ function linechart() {
                 .append("g")
                 .attr('class', 'linechart_wrapper ' + mname)
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            // x.domain(data.map(function(d) { return d.Date; }));      
+             
             y.domain(d3.extent(data, function(d) {
                 return d[MValue];
             })).nice();

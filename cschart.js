@@ -23,9 +23,7 @@ function cschart() {
                     return d.Date
                 }))
                 .on("zoom", zoomed);
-
-            // var interval = TIntervals[TPeriod];
-
+            
             var minimal = d3.min(genData, function(d) {
                 return d.Low;
             });
@@ -37,9 +35,7 @@ function cschart() {
                 .rangeRound([height, 0]);
 
             // tmp_y axis for pan functionality
-            var tmp_y = d3.scale.linear().rangeRound([height, 0]);
-
-            // var parseDate = d3.time.format(TFormat[interval]);      
+            var tmp_y = d3.scale.linear().rangeRound([height, 0]);        
 
             var xAxis = d3.svg.axis()                
                 .scale(x);
