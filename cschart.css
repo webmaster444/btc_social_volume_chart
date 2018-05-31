@@ -99,7 +99,7 @@ path {
 }
 .custom-control-label::after {
     position: absolute;
-    top: 0.34375rem;
+    top: 0;
     left: 0;
     display: block;
     width: 0.8125rem;
@@ -139,6 +139,7 @@ fieldset:focus{
 fieldset{
     border: 0;
     outline: none;
+    padding: 0 20px;
 }
 .custom-checkbox .custom-control-input:checked ~ .custom-control-label {
     color: #07B0BB;
@@ -159,7 +160,7 @@ fieldset{
 }
 .custom-control-label::before {
     position: absolute;
-    top: 0.34375rem;
+    top: 0;
     left: 0;
     display: block;
     width: 0.8125rem;
@@ -230,7 +231,7 @@ fieldset{
 .ohlc_indicator{stroke:#fc6a42;fill: #fc6a42;}
 .ip_indicator{stroke:#FAEFBD;fill: #FAEFBD;}
 
-legend{color: black;}
+legend{color: #1904304d !important;text-align: left;padding-left: 0;margin-bottom: 10px;}
 
 .implied_price{display: none;}
 .linechart_wrapper.ip{display: none;}
@@ -260,3 +261,6 @@ path.line{
 }
 
 #radioes2 label.active{font-weight: 700;color: #2f2681;text-decoration: underline;}
+.list-inline{
+    text-align: left;
+}
