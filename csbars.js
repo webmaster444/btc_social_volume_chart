@@ -51,7 +51,8 @@ function barchart() {
                 .call(yAxis.orient("right").tickFormat("").tickSize(0));
 
             // var barwidth = width / genData.length;
-            var barwidth = width / 8;
+            var tmp_divider = TCount[period][interval];
+            var barwidth = width / tmp_divider;
 
             var fillwidth = (Math.floor(barwidth * 0.9) / 2) * 2 + 1;        
             var bardelta = Math.round((barwidth - fillwidth) / 2);            

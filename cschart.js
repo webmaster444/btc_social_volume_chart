@@ -51,7 +51,10 @@ function cschart() {
             y.domain([minimal, maximal]).nice();
 
             // var barwidth = width / genData.length;
-            var barwidth = width / 8;
+
+            var tmp_divider = TCount[period][interval]; 
+            console.log(tmp_divider);
+            var barwidth = width / tmp_divider;
             // var candlewidth = Math.floor(d3.min([barwidth * 0.8, 13]) / 2) * 2 + 1;
             var candlewidth = (Math.floor(barwidth * 0.9) / 2) * 2 + 1;            
             var delta = Math.round((barwidth - candlewidth) / 2);

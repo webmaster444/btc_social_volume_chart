@@ -30,31 +30,44 @@ var TFormat = {
 };
 
 var TCount = {
-    "1w": 7,
-    "1m": 30,
-    "2w": 14,
-    "1d": 24
+    "1w": {"day":8,"hour":24 * 7},
+    "1m": {"day":30,"hour": 24 * 30},
+    "2w": {"day":14,"hour":24 * 14},
+    "1d": {"minute":24 * 60,"hour":25},
+    "3h": {"minute":180},
+    "6h": {"minute":360},
+    "1h": {"minute":60},
+    "6m": {"day":180},
+    "1y": {"day":365}
 }
 changeDomain(period);
 function changeDomain(period){
     if (period == "1w") {
         timestampduration = 1000 * 60 * 60 * 24 * 8;    
     }else if(period =='1m'){
-        timestampduration = 1000 * 60 * 60 * 24 * 30;
+        timestampduration = 1000 * 60 * 60 * 24 * 31;
     }else if (period =='2w'){
-        timestampduration = 1000 * 60 * 60 * 24 * 14;
+        timestampduration = 1000 * 60 * 60 * 24 * 15;
     }else if (period =='3m'){
-        timestampduration = 1000 * 60 * 60 * 24 * 30 * 3;
+        timestampduration = 1000 * 60 * 60 * 24 * 31 * 3;
     }else if(period == '6m'){
-        timestampduration = 1000 * 60 * 60 * 24 * 30 * 6;
+        timestampduration = 1000 * 60 * 60 * 24 * 31 * 6;
     }else if(period =='1y'){
-        timestampduration = 1000 * 60 * 60 * 24 * 365;
+        timestampduration = 1000 * 60 * 60 * 24 * 366;
+    }else if(period == "3h"){
+        timestampduration = 1000 * 60 * 60 * 3;
+    }else if(period =="1h"){
+        timestampduration = 1000 * 60 * 60;
+    }else if(period =="1d"){
+        timestampduration = 1000 * 60 * 60 * 24;
+    }else if(period =="6h"){
+        timestampduration = 1000 * 60 * 60 * 6;
     }
     startDomain = endDomain - timestampduration;
     return startDomain;
 }
 (function() {
-    var url = "https://dev.decryptz.com/api/v1/charts/dashboard?symbol=btc&interval=day&startDate="+startDate+"&endDate="+endDate;
+    var url = "https://dev.decryptz.com/api/v1/charts/dashboard?symbol=btc&interval="+interval+"&startDate="+startDate+"&endDate="+endDate;
     d3.json(url, function(error, data) {        
         data.forEach(function(d) {
             d.Date = Date.parse(d.Date);
@@ -180,8 +193,9 @@ $('input[type=radio][name=view]').change(function() {
         $('#period').append('<option value="3h" selected>3h</option>');
         $('#period').append('<option value="6h">6h</option>');
         $('#period').append('<option value="1d">1d</option>');
-        $('.implied_price').css('display', 'none');
+        $('.implied_price').css('display', 'none');        
         interval = "minute";
+        period   = "3h";        
     } else if ($(this).val() == "1h") {
         $('#period').append('<option value="1d">1d</option>');
         $('#period').append('<option value="1w" selected>1w</option>');
@@ -189,6 +203,7 @@ $('input[type=radio][name=view]').change(function() {
         $('#period').append('<option value="1m">1m</option>');
         $('.implied_price').css('display', 'none');
         interval = "hour";
+        period = "1w";
     } else if ($(this).val() == "1d") {
         $('#period').append('<option value="1w">1w</option>');
         $('#period').append('<option value="1m" selected>1m</option>');
@@ -196,7 +211,9 @@ $('input[type=radio][name=view]').change(function() {
         $('#period').append('<option value="1y">1y</option>');
         $('.implied_price').css('display', 'inline-block');
         interval = "day";
+        period = "1m";
     }
+    changeDomain(period);
     $(this).parent().addClass('active');
     if (interval == 'minute') {
         startDate = "2018-05-25T00:00:00";
@@ -229,3 +246,10 @@ $('input[type=radio][name=view]').change(function() {
 });
 
 document.getElementById('chart1').onwheel = function(){ return false; }
+
+$(document).on("change", "#period", function() {
+    period = $(this).val();
+    changeDomain(period);        
+    $('#chart1').empty();        
+    mainjs();    
+});
