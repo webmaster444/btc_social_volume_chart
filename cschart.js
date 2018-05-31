@@ -220,7 +220,7 @@ function cschart() {
                 x_line.attr('x1',d3.mouse(this)[0]).attr('x2',d3.mouse(this)[0]);
                 y_line.attr('y1',d3.mouse(this)[1]).attr('y2',d3.mouse(this)[1]);
                 x_move_wrapper.select('text').text(parseDate(x0));
-                focus_g.select("text").text(y0);
+                focus_g.select("text").text(y0.toFixed(0));
               }
 
             function zoomed() {
