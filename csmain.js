@@ -1,7 +1,7 @@
 var genRaw, genData;
 var ema12, ema26 = [];
 var startDate = "2018-04-01T00:00:00";
-var endDate = "2018-05-27T00:00:00";
+var endDate = "2018-05-30T00:00:00";
 var period = "1w";
 var endDomain = Date.parse(endDate);
 var startDomain = Date.parse(startDate);
@@ -196,13 +196,13 @@ $('input[type=radio][name=view]').change(function() {
     $('#checkboxes2 input[type="checkbox"]').prop('checked', false);
     changeDomain(period);
     $(this).parent().addClass('active');
-    // if (interval == 'minute') {
-    //     startDate = "2018-05-25T00:00:00";
-    // } else if (interval == 'hour') {
-    //     startDate = "2018-04-01T00:00:00";
-    // } else if (interval == 'day') {
-    //     startDate = "2018-04-01T00:00:00";
-    // }
+    if (interval == 'minute') {
+        startDate = "2018-05-28T00:00:00";
+    } else if (interval == 'hour') {
+        startDate = "2018-03-01T00:00:00";
+    } else if (interval == 'day') {
+        startDate = "2017-04-01T00:00:00";
+    }
     var url = "https://dev.decryptz.com/api/v1/charts/dashboard?symbol=btc&interval=" + interval + "&startDate=" + startDate + "&endDate=" + endDate;
 
     d3.json(url, function(error, data) {
