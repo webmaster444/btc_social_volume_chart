@@ -1,5 +1,12 @@
-var parseDate = d3.time.format("%Y-%m-%d").parse;
-var TPeriod = "3M";
+var genRaw, genData;
+var ema12, ema26 = [];
+var startDate = "2018-04-01T00:00:00";
+var endDate = "2018-05-27T00:00:00";
+var period = "1w";
+var endDomain = Date.parse(endDate);
+var startDomain = Date.parse(startDate);
+var timestampduration = 0;
+var interval='hour';
 var TDays = {
     "1M": 21,
     "3M": 63,
@@ -18,24 +25,37 @@ var TIntervals = {
 };
 var TFormat = {
     "day": "%d",
-    "week": "%d %b '%y",
-    "month": "%b '%y"
+    "minute": "%m %h %d",
+    "hour": "%H %d"
 };
-var genRaw, genData;
-var ema12, ema26 = [];
-var startDate = "2018-05-01T00:00:00";
-var endDate = "2018-05-27T00:00:00";
-var period = "1w";
-var endDomain = Date.parse(endDate);
-var startDomain = Date.parse(startDate);
-if (period == "1w") {
-    var timestamp = 1000 * 60 * 60 * 24 * 7;
-    startDomain = endDomain - timestamp;
+
+var TCount = {
+    "1w": 7,
+    "1m": 30,
+    "2w": 14,
+    "1d": 24
+}
+changeDomain(period);
+function changeDomain(period){
+    if (period == "1w") {
+        timestampduration = 1000 * 60 * 60 * 24 * 8;    
+    }else if(period =='1m'){
+        timestampduration = 1000 * 60 * 60 * 24 * 30;
+    }else if (period =='2w'){
+        timestampduration = 1000 * 60 * 60 * 24 * 14;
+    }else if (period =='3m'){
+        timestampduration = 1000 * 60 * 60 * 24 * 30 * 3;
+    }else if(period == '6m'){
+        timestampduration = 1000 * 60 * 60 * 24 * 30 * 6;
+    }else if(period =='1y'){
+        timestampduration = 1000 * 60 * 60 * 24 * 365;
+    }
+    startDomain = endDomain - timestampduration;
+    return startDomain;
 }
 (function() {
-    var url = "https://dev.decryptz.com/api/v1/charts/dashboard?symbol=btc&interval=day&startDate=2018-04-01%2000:00:00&endDate=2018-05-28%2000:00:00";
-    d3.json(url, function(error, data) {
-        // d3.json("api_data2.json",function(error,data){        
+    var url = "https://dev.decryptz.com/api/v1/charts/dashboard?symbol=btc&interval=day&startDate="+startDate+"&endDate="+endDate;
+    d3.json(url, function(error, data) {        
         data.forEach(function(d) {
             d.Date = Date.parse(d.Date);
             d.Low = +d.Low;
@@ -62,21 +82,14 @@ if (period == "1w") {
 
 }());
 
-function toSlice(data) {
-    return data.slice(-TDays[TPeriod]);
-}
 
 function mainjs() {
-    var toPress = function() {
-        genData = (TIntervals[TPeriod] != "day") ? dataCompress(toSlice(genRaw), TIntervals[TPeriod]) : toSlice(genRaw);
-    };
-    toPress();
+    genData = genRaw;
     displayAll();    
 }
 
 function displayAll() {    
     displayCS();
-    displayGen(genData.length - 1);
 }
 
 function displayCS() {
@@ -113,24 +126,6 @@ function displayCS() {
 }
 
 function hoverAll() {
-    d3.select("#chart1").select(".bands").selectAll("rect")
-        .on("mouseover", function(d, i) {
-            d3.select(this).classed("hoved", true);
-            d3.select(".stick" + i).classed("hoved", true);
-            d3.select(".candle" + i).classed("hoved", true);
-            d3.select(".volume" + i).classed("hoved", true);
-            d3.select(".sigma" + i).classed("hoved", true);
-            displayGen(i);
-        })
-        .on("mouseout", function(d, i) {
-            d3.select(this).classed("hoved", false);
-            d3.select(".stick" + i).classed("hoved", false);
-            d3.select(".candle" + i).classed("hoved", false);
-            d3.select(".volume" + i).classed("hoved", false);
-            d3.select(".sigma" + i).classed("hoved", false);
-            displayGen(genData.length - 1);
-        });
-
     d3.select('#chart1').selectAll('path').on('mouseover', function(d, i) {
         d3.select(this).style('stroke-width', '4px');
     }).on('mouseout', function(d, i) {
@@ -167,11 +162,6 @@ function calcema(period, data) {
     return emares;
 }
 
-function displayGen(mark) {
-    // var header      = csheader();
-    // d3.select("#infobar").datum(genData.slice(mark)[0]).call(header);
-}
-
 $('.custom-control-input').change(function() {
     if ($(this).val() != "implied_price") {
         var clicked = $(this).val();
@@ -182,31 +172,32 @@ $('.custom-control-input').change(function() {
     }
 })
 
-$('input[type=radio][name=view]').change(function() {
-    var interval = '';
+$('input[type=radio][name=view]').change(function() {    
     $('#period').html('');
+    $('#radioes2 label').removeClass('active');
     if ($(this).val() == '1m') {
         $('#period').append('<option value="1h">1h</option>');
-        $('#period').append('<option value="3h">3h</option>');
+        $('#period').append('<option value="3h" selected>3h</option>');
         $('#period').append('<option value="6h">6h</option>');
         $('#period').append('<option value="1d">1d</option>');
         $('.implied_price').css('display', 'none');
         interval = "minute";
     } else if ($(this).val() == "1h") {
         $('#period').append('<option value="1d">1d</option>');
-        $('#period').append('<option value="1w">1w</option>');
+        $('#period').append('<option value="1w" selected>1w</option>');
         $('#period').append('<option value="2w">2w</option>');
         $('#period').append('<option value="1m">1m</option>');
         $('.implied_price').css('display', 'none');
         interval = "hour";
     } else if ($(this).val() == "1d") {
         $('#period').append('<option value="1w">1w</option>');
-        $('#period').append('<option value="1m">1m</option>');
+        $('#period').append('<option value="1m" selected>1m</option>');
         $('#period').append('<option value="6m">6m</option>');
         $('#period').append('<option value="1y">1y</option>');
         $('.implied_price').css('display', 'inline-block');
         interval = "day";
     }
+    $(this).parent().addClass('active');
     if (interval == 'minute') {
         startDate = "2018-05-25T00:00:00";
     } else if (interval == 'hour') {
@@ -217,8 +208,7 @@ $('input[type=radio][name=view]').change(function() {
     var url = "https://dev.decryptz.com/api/v1/charts/dashboard?symbol=btc&interval=" + interval + "&startDate=" + startDate + "&endDate=" + endDate;
 
     d3.json(url, function(error, data) {
-        $('#chart1').empty();
-        // d3.json("api_data2.json",function(error,data){        
+        $('#chart1').empty();        
         data.forEach(function(d) {
             d.Date = Date.parse(d.Date);
             d.Low = +d.Low;
@@ -237,3 +227,5 @@ $('input[type=radio][name=view]').change(function() {
         mainjs();
     });
 });
+
+document.getElementById('chart1').onwheel = function(){ return false; }

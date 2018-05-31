@@ -18,6 +18,7 @@ function barchart() {
             var x = d3.time.scale()
                 .domain([startDomain, endDomain])
                 .range([width / data.length / 2, width - width / data.length / 2]);
+                
 
             var zoom = d3.behavior.zoom()
                 .x(x)
@@ -49,9 +50,11 @@ function barchart() {
                 .attr("transform", "translate(" + width + ",0)")
                 .call(yAxis.orient("right").tickFormat("").tickSize(0));
 
-            var barwidth = width / genData.length;
-            var fillwidth = (Math.floor(barwidth * 0.9) / 2) * 2 + 1;
-            var bardelta = Math.round((barwidth - fillwidth) / 2);
+            // var barwidth = width / genData.length;
+            var barwidth = width / 8;
+
+            var fillwidth = (Math.floor(barwidth * 0.9) / 2) * 2 + 1;        
+            var bardelta = Math.round((barwidth - fillwidth) / 2);            
 
             var mbar = svg.selectAll("." + mname + "bar")
                 .data([data])
@@ -65,7 +68,7 @@ function barchart() {
                 .enter().append("rect")
                 .attr("class", mname + "fill")
                 .attr("x", function(d) {
-                    return x(d.Date) + bardelta;
+                    return x(d.Date) -fillwidth/2;
                 })
                 .attr("y", function(d) {
                     return y(d[MValue]);

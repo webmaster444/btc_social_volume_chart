@@ -13,8 +13,7 @@ function emachart() {
           .rangeRound([height, 0]);
       
       var xAxis = d3.svg.axis()
-          .scale(x)
-          .tickFormat(d3.time.format(TFormat[TIntervals[TPeriod]]));
+          .scale(x);          
       
       var yAxis = d3.svg.axis()
           .scale(y)

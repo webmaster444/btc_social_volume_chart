@@ -15,7 +15,7 @@ function cschart() {
 
             var x = d3.time.scale()
                 .domain([startDomain, endDomain])
-                .range([width / genData.length / 2, (width - width / genData.length / 2 )]);            
+                .range([width / genData.length / 2, (width - width / genData.length / 2 )]).nice();            
 
             var zoom = d3.behavior.zoom()
                 .x(x)
@@ -24,17 +24,14 @@ function cschart() {
                 }))
                 .on("zoom", zoomed);
 
-            var interval = TIntervals[TPeriod];
+            // var interval = TIntervals[TPeriod];
 
             var minimal = d3.min(genData, function(d) {
                 return d.Low;
             });
             var maximal = d3.max(genData, function(d) {
                 return d.High;
-            });
-
-            var extRight = width + margin.right            
-
+            });                
             // y axis 
             var y = d3.scale.linear()
                 .rangeRound([height, 0]);
@@ -42,10 +39,10 @@ function cschart() {
             // tmp_y axis for pan functionality
             var tmp_y = d3.scale.linear().rangeRound([height, 0]);
 
-            var parseDate = d3.time.format(TFormat[interval]);      
+            // var parseDate = d3.time.format(TFormat[interval]);      
 
-            var xAxis = d3.svg.axis()
-                .scale(x);            
+            var xAxis = d3.svg.axis()                
+                .scale(x);
 
             var yAxis = d3.svg.axis()
                 .scale(y)
@@ -53,16 +50,18 @@ function cschart() {
 
             y.domain([minimal, maximal]).nice();
 
-            var barwidth = width / genData.length;
-            var candlewidth = Math.floor(d3.min([barwidth * 0.8, 13]) / 2) * 2 + 1;
+            // var barwidth = width / genData.length;
+            var barwidth = width / 8;
+            // var candlewidth = Math.floor(d3.min([barwidth * 0.8, 13]) / 2) * 2 + 1;
+            var candlewidth = (Math.floor(barwidth * 0.9) / 2) * 2 + 1;            
             var delta = Math.round((barwidth - candlewidth) / 2);
 
-            var valuelinepv = d3.svg.line().x(function(d) {return x(d.Date) + barwidth / 2;}).y(function(d) {return tmp_y(d['PV']);});
-            var valuelinetv = d3.svg.line().x(function(d) {return x(d.Date) + barwidth / 2;}).y(function(d) {return tmp_y(d['TV']);});
-            var valuelinenv = d3.svg.line().x(function(d) {return x(d.Date) + barwidth / 2;}).y(function(d) {return tmp_y(d['NV']);});
-            var valuelineps = d3.svg.line().x(function(d) {return x(d.Date) + barwidth / 2;}).y(function(d) {return tmp_y(d['PS']);});
-            var valuelineema12 = d3.svg.line().x(function(d) {return x(d.Date) + barwidth / 2;}).y(function(d) {return tmp_y(d['ema']);});
-            var valuelineema26 = d3.svg.line().x(function(d) {return x(d.Date) + barwidth / 2;}).y(function(d) {return tmp_y(d['ema']);});
+            var valuelinepv = d3.svg.line().x(function(d) {return x(d.Date);}).y(function(d) {return tmp_y(d['PV']);});
+            var valuelinetv = d3.svg.line().x(function(d) {return x(d.Date);}).y(function(d) {return tmp_y(d['TV']);});
+            var valuelinenv = d3.svg.line().x(function(d) {return x(d.Date);}).y(function(d) {return tmp_y(d['NV']);});
+            var valuelineps = d3.svg.line().x(function(d) {return x(d.Date);}).y(function(d) {return tmp_y(d['PS']);});
+            var valuelineema12 = d3.svg.line().x(function(d) {return x(d.Date);}).y(function(d) {return tmp_y(d['ema']);});
+            var valuelineema26 = d3.svg.line().x(function(d) {return x(d.Date);}).y(function(d) {return tmp_y(d['ema']);});
 
             d3.select(this).select("svg").remove();
             var svg = d3.select(this).append("svg")
@@ -102,7 +101,7 @@ function cschart() {
                     return d;
                 })
                 .enter().append("rect")
-                .attr("x", function(d) {
+                .attr("x", function(d) {                    
                     return x(d.Date) + Math.floor(barwidth / 2);
                 })
                 .attr("y", 0)
@@ -124,7 +123,7 @@ function cschart() {
                 })
                 .enter().append("rect")
                 .attr("x", function(d) {
-                    return x(d.Date) + Math.floor(barwidth / 2);
+                    return x(d.Date);
                 })
                 .attr("y", function(d) {
                     return y(d.High);
@@ -154,7 +153,7 @@ function cschart() {
                 })
                 .enter().append("rect")
                 .attr("x", function(d) {
-                    return x(d.Date) + delta;
+                    return x(d.Date) -candlewidth/2;
                 })
                 .attr("y", function(d) {
                     return y(d3.max([d.Open, d.Close]));
@@ -184,19 +183,19 @@ function cschart() {
                 .attr("width", width)
                 .attr("height", height)
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-                .call(zoom);
+                .call(zoom).on("wheel.zoom", null);
 
             function zoomed() {
                 svg.select(".xaxis").call(xAxis);
                 svg.selectAll('.candle').data(genData).attr("x", function(d) {
-                    return x(d.Date) + delta
+                    return x(d.Date) - candlewidth/2
                 });
                 svg.selectAll('.stick').data(genData).attr("x", function(d) {
-                    return x(d.Date) + Math.floor(barwidth / 2)
+                    return x(d.Date)
                 });
 
                 d3.selectAll('.volume').data(genData).attr("x", function(d) {
-                    return x(d.Date) + delta
+                    return x(d.Date) - candlewidth/2
                 });
                 
                 tmp_y.domain(d3.extent(genData, function(d) {return d['PV'];})).nice();
