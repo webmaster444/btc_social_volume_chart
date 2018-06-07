@@ -202,8 +202,13 @@ function cschart() {
                 .attr("width", width)
                 .attr("height", height)
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")") 
-                .on('mousedown',function(){d3.select(this).style('cursor','-webkit-grabbing')})     
-                .on('mouseup',function(){d3.select(this).style('cursor','crosshair')})
+                .on('mousedown',function(){d3.select(this).style('cursor','-webkit-grabbing');
+                focus_g.style("display", "none"); x_move_wrapper.style("display","none");
+                x_line.style('display',"none");y_line.style('display',"none")
+            })     
+                .on('mouseup',function(){d3.select(this).style('cursor','crosshair');
+                focus_g.style("display", null); x_move_wrapper.style("display",null);
+                x_line.style('display',null);y_line.style('display',null)})
                 .on("mouseover", function() { focus_g.style("display", null); x_move_wrapper.style("display",null);
                     x_line.style('display',null);y_line.style('display',null)
                 })
