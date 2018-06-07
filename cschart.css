@@ -64,8 +64,7 @@
 #volchart input { cursor: pointer; }
 
 path { 
-  stroke: steelblue;
-  stroke-width: 2;
+  stroke: steelblue;  
   fill: none;
 }
 
