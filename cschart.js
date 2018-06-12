@@ -10,6 +10,7 @@ function cschart() {
         height = 440,
         Bheight = 460;
 
+    var barHeight  = 60;
     function csrender(selection) {
         selection.each(function() {
             var parseDate = d3.time.format("%d-%b");
@@ -38,6 +39,8 @@ function cschart() {
 
             // tmp_y axis for pan functionality
             var tmp_y = d3.scale.linear().rangeRound([height, 0]);        
+
+            var bar_y = d3.scale.linear().rangeRound([barHeight, 0]);
 
             var xAxis = d3.svg.axis()                
                 .scale(x);
@@ -240,15 +243,24 @@ function cschart() {
                     return x(d.Date)
                 });
 
-                d3.selectAll('.volume').data(genData).attr("x", function(d) {
-                    return x(d.Date) - candlewidth/2
-                });
-
                 var new_genData = genData.filter(function(d){                                        
                         if(d.Date > vis_startDomain && d.Date <vis_endDomain){
                             return d;
                         }
                     });
+                
+                bar_y.domain([0, d3.max(new_genData, function(d) {
+                    return d["Volume"];
+                })]).nice();
+                
+                // d3.selectAll('.volume').data(genData)
+                d3.selectAll('.volume').data(genData).attr("x", function(d) {
+                    return x(d.Date) - candlewidth/2
+                }).attr("y", function(d) {                    
+                    return bar_y(d['Volume']);
+                }).attr("height", function(d) {                    
+                    return bar_y(0) - bar_y(d['Volume']);                    
+                });
 
                 tmp_y.domain(d3.extent(new_genData, function(d) {return d['PV'];})).nice();
                 d3.selectAll(".pvline")                     
