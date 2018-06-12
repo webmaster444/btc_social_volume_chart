@@ -33,13 +33,15 @@ function cschart() {
             var maximal = d3.max(genData, function(d) {
                 return d.High;
             });                
-            // y axis 
-            var y = d3.scale.linear()
-                .rangeRound([height, 0]);
+            
+            // y axes for OHLC chart
+            var y = d3.scale.linear().rangeRound([height, 0]);
+            var pan_y = d3.scale.linear().rangeRound([height, 0]);
 
-            // tmp_y axis for pan functionality
+            // y axis for line charts pan functionality
             var tmp_y = d3.scale.linear().rangeRound([height, 0]);        
 
+            // y axis for bar chart pan functionality
             var bar_y = d3.scale.linear().rangeRound([barHeight, 0]);
 
             var xAxis = d3.svg.axis()                
@@ -248,7 +250,17 @@ function cschart() {
                             return d;
                         }
                     });
-                
+
+
+
+                // pan_y.domain([d3.min(new_genData, function(d) {
+                //     return d.Low;
+                // }), d3.max(new_genData, function(d) {
+                //     return d.High;
+                // })]).nice();
+
+                console.log(pan_y.domain());
+
                 bar_y.domain([0, d3.max(new_genData, function(d) {
                     return d["Volume"];
                 })]).nice();
