@@ -13,14 +13,13 @@ function cschart() {
     function csrender(selection) {
         selection.each(function() {
             var parseDate = d3.time.format("%d-%b");
-
             var x = d3.time.scale()
                 .domain([startDomain, endDomain])
                 .range([width / genData.length / 2, (width - width / genData.length / 2 )]).nice();            
 
             var zoom = d3.behavior.zoom()
                 .x(x)
-                .xExtent(d3.extent(genData, function(d) {
+                .xExtent(d3.extent(genData, function(d) {                    
                     return d.Date
                 }))
                 .on("zoom", zoomed);
@@ -230,7 +229,9 @@ function cschart() {
                 focus_g.select("text").text(y0.toFixed(0));
               }
 
-            function zoomed() {
+            function zoomed() {                
+                var vis_startDomain = Date.parse(x.domain()[0]);
+                var vis_endDomain = Date.parse(x.domain()[1]);
                 svg.select(".xaxis").call(xAxis);
                 svg.selectAll('.candle').data(genData).attr("x", function(d) {
                     return x(d.Date) - candlewidth/2
@@ -242,25 +243,62 @@ function cschart() {
                 d3.selectAll('.volume').data(genData).attr("x", function(d) {
                     return x(d.Date) - candlewidth/2
                 });
-                
-                tmp_y.domain(d3.extent(genData, function(d) {return d['PV'];})).nice();
+
+                var new_genData = genData.filter(function(d){                                        
+                        if(d.Date > vis_startDomain && d.Date <vis_endDomain){
+                            return d;
+                        }
+                    });
+
+                tmp_y.domain(d3.extent(new_genData, function(d) {return d['PV'];})).nice();
                 d3.selectAll(".pvline")                     
-                    .attr("d", valuelinepv(genData));
+                    .attr("d", valuelinepv(new_genData));
+                
+                tmp_y.domain(d3.extent(new_genData, function(d) {return d['PS'];})).nice();
+                d3.selectAll(".psline")                     
+                    .attr("d", valuelineps(new_genData));
+                
+                tmp_y.domain(d3.extent(new_genData, function(d) {return d['TV'];})).nice();
+                d3.selectAll(".tvline")                     
+                    .attr("d", valuelinetv(new_genData));
+                
+                tmp_y.domain(d3.extent(new_genData, function(d) {return d['NV'];})).nice();
+                d3.selectAll(".nvline")                     
+                    .attr("d", valuelinenv(new_genData));
 
-                tmp_y.domain(d3.extent(genData, function(d) {return d['PS'];})).nice();
-                d3.selectAll(".psline").attr("d", valuelineps(genData));
 
-                tmp_y.domain(d3.extent(genData, function(d) {return d['TV'];})).nice();
-                d3.selectAll(".tvline").attr("d", valuelinetv(genData));
+                // tmp_y.domain(d3.extent(genData, function(d) {return d['PS'];})).nice();
+                // d3.selectAll(".psline").attr("d", valuelineps(genData));
 
-                tmp_y.domain(d3.extent(genData, function(d) {return d['NV'];})).nice();
-                d3.selectAll(".nvline").attr("d", valuelinenv(genData));
+                // tmp_y.domain(d3.extent(genData, function(d) {return d['TV'];})).nice();
+                // d3.selectAll(".tvline").attr("d", valuelinetv(genData));
 
-                tmp_y.domain(d3.extent(ema12, function(d) {return d['ema'];})).nice();
-                d3.selectAll(".ema12line").attr("d", valuelineema12(ema12));
+                // tmp_y.domain(d3.extent(genData, function(d) {return d['NV'];})).nice();
+                // d3.selectAll(".nvline").attr("d", valuelinenv(genData));
 
-                tmp_y.domain(d3.extent(ema26, function(d) {return d['ema'];})).nice();
-                d3.selectAll(".ema26line").attr("d", valuelineema26(ema26));
+                var new_ema12 = ema12.filter(function(d){                                        
+                        if(d.Date > vis_startDomain && d.Date <vis_endDomain){
+                            return d;
+                        }
+                    });
+
+                tmp_y.domain(d3.extent(new_ema12, function(d) {return d['ema'];})).nice();
+                d3.selectAll(".ema12line").attr("d", valuelineema12(ema12));    
+
+                // tmp_y.domain(d3.extent(ema12, function(d) {return d['ema'];})).nice();
+                // d3.selectAll(".ema12line").attr("d", valuelineema12(ema12));
+
+                var new_ema26 = ema26.filter(function(d){                                        
+                        if(d.Date > vis_startDomain && d.Date <vis_endDomain){
+                            return d;
+                        }
+                    });
+
+                tmp_y.domain(d3.extent(new_ema26, function(d) {return d['ema'];})).nice();
+                d3.selectAll(".ema26line").attr("d", valuelineema26(ema26));        
+
+                // tmp_y.domain(d3.extent(ema26, function(d) {return d['ema'];})).nice();
+                // d3.selectAll(".ema26line").attr("d", valuelineema26(ema26));
             }
 
         });
