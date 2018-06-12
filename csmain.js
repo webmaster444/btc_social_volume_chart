@@ -46,7 +46,7 @@ function changeDomain(period){
     return startDomain;
 }
 (function() {
-    var url = "https://dev.decryptz.com/api/v1/charts/dashboard?symbol=btc&interval="+interval+"&startDate="+startDate+"&endDate="+endDate;
+    var url = "https://dev.decryptz.com/api/v1/charts/d3-tmp?key=JnW39hF43pkbqBo&symbol=btc&interval="+interval+"&startDate="+startDate+"&endDate="+endDate;
     d3.json(url, function(error, data) {        
         data.forEach(function(d) {
             d.Date = Date.parse(d.Date);
@@ -203,7 +203,7 @@ $('input[type=radio][name=view]').change(function() {
     } else if (interval == 'day') {
         startDate = "2017-04-01T00:00:00";
     }
-    var url = "https://dev.decryptz.com/api/v1/charts/dashboard?symbol=btc&interval=" + interval + "&startDate=" + startDate + "&endDate=" + endDate;
+    var url = "https://dev.decryptz.com/api/v1/charts/d3-tmp?key=JnW39hF43pkbqBo&symbol=btc&interval=" + interval + "&startDate=" + startDate + "&endDate=" + endDate;
 
     d3.json(url, function(error, data) {
         $('#chart1').empty();        
