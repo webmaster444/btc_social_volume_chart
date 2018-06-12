@@ -238,12 +238,6 @@ function cschart() {
                 var vis_startDomain = Date.parse(x.domain()[0]);
                 var vis_endDomain = Date.parse(x.domain()[1]);
                 svg.select(".xaxis").call(xAxis);
-                svg.selectAll('.candle').data(genData).attr("x", function(d) {
-                    return x(d.Date) - candlewidth/2
-                });
-                svg.selectAll('.stick').data(genData).attr("x", function(d) {
-                    return x(d.Date)
-                });
 
                 var new_genData = genData.filter(function(d){                                        
                         if(d.Date > vis_startDomain && d.Date <vis_endDomain){
@@ -251,15 +245,34 @@ function cschart() {
                         }
                     });
 
+                pan_y.domain([d3.min(new_genData, function(d) {
+                    return d.Low;
+                }), d3.max(new_genData, function(d) {
+                    return d.High;
+                })]).nice();
 
+                svg.selectAll('.candle').data(genData).attr("x", function(d) {
+                    return x(d.Date) - candlewidth/2
+                }).attr("y", function(d) {
+                    return pan_y(d3.max([d.Open, d.Close]));
+                })
+                .attr("height", function(d) {
+                    return pan_y(d3.min([d.Open, d.Close])) - pan_y(d3.max([d.Open, d.Close]));
+                });
 
-                // pan_y.domain([d3.min(new_genData, function(d) {
-                //     return d.Low;
-                // }), d3.max(new_genData, function(d) {
-                //     return d.High;
-                // })]).nice();
-
-                console.log(pan_y.domain());
+                svg.selectAll('.stick').data(genData).attr("x", function(d) {
+                    return x(d.Date)
+                }).attr("y", function(d) {
+                    return pan_y(d.High);
+                }).attr("class", function(d, i) {
+                    return "stick stick" + i;
+                }).attr("height", function(d) {
+                    return pan_y(d.Low) - pan_y(d.High);
+                }).classed("rise", function(d) {
+                    return (d.Close > d.Open);
+                }).classed("fall", function(d) {
+                    return (d.Open > d.Close);
+                });;
 
                 bar_y.domain([0, d3.max(new_genData, function(d) {
                     return d["Volume"];
