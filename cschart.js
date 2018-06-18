@@ -199,7 +199,7 @@ function cschart() {
 
             focus_g.append('svg').attr('viewBox', "0 0 65 15").attr("enable-background", "new 0 0 65 15").attr('xml:space', "preserve");
             focus_g.append('path').attr("d", "M65.1,0H11C8.2,0,6.8,0.7,4.5,2.7L0,7.2l4.3,4.6c0,0,3,3.2,6.5,3.2H65L65.1,0L65.1,0z").attr('class', 'focus_indicator');
-            focus_g.append('text').attr('x', 12).attr('y', 0).attr('dy', '1em').text("ttt");
+            focus_g.append('text').attr('x', 12).attr('y', 0).attr('dy', '1em').text("0");
 
             var x_move_wrapper = svg.append('g').attr('class','x_wrapper').style('display','none');
 
