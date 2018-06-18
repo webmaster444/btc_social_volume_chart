@@ -33,8 +33,14 @@ function linechart() {
                 .append("g")
                 .attr('class', 'linechart_wrapper ' + mname)
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-             
-            y.domain(d3.extent(data, function(d) {
+            
+            var new1_genData = data.filter(function(d){                                        
+                    if(d.Date > startDomain && d.Date <endDomain){
+                        return d;
+                    }
+                });
+
+            y.domain(d3.extent(new1_genData, function(d) {
                 return d[MValue];
             })).nice();
 

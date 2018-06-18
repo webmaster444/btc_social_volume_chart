@@ -24,8 +24,13 @@ function emachart() {
           .append("g")
           .attr('class','ema_chart ema_chart_wrapper_'+mname)
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        
-      y.domain(d3.extent(data, function(d) { return d.ema; })).nice();
+      
+      var new1_genData = data.filter(function(d){                                        
+          if(d.Date > startDomain && d.Date <endDomain){
+              return d;
+          }
+      });        
+      y.domain(d3.extent(new1_genData, function(d) { return d.ema; })).nice();
 
   
       var xtickdelta   = Math.ceil(60/(width/data.length))

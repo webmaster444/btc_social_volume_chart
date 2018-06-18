@@ -41,7 +41,13 @@ function barchart() {
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             
-            y.domain([0, d3.max(data, function(d) {
+            var new1_genData = data.filter(function(d){                                        
+                    if(d.Date > startDomain && d.Date <endDomain){
+                        return d;
+                    }
+                });
+                        
+            y.domain([0, d3.max(new1_genData, function(d) {
                 return d["Volume"];
             })]).nice();
 

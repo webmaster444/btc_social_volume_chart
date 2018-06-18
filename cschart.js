@@ -51,15 +51,15 @@ function cschart() {
                 .scale(y)
                 .ticks(Math.floor(height / 50));
 
-            var new_genData = genData.filter(function(d){                                        
+            var new1_genData = genData.filter(function(d){                                        
                     if(d.Date > startDomain && d.Date <endDomain){
                         return d;
                     }
                 });
 
-            y.domain([d3.min(new_genData, function(d) {
+            y.domain([d3.min(new1_genData, function(d) {
                     return d.Low;
-                }), d3.max(new_genData, function(d) {
+                }), d3.max(new1_genData, function(d) {
                     return d.High;
                 })]).nice();
 
