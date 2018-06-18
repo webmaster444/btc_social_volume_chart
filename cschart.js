@@ -51,7 +51,19 @@ function cschart() {
                 .scale(y)
                 .ticks(Math.floor(height / 50));
 
-            y.domain([minimal, maximal]).nice();
+            var new_genData = genData.filter(function(d){                                        
+                    if(d.Date > startDomain && d.Date <endDomain){
+                        return d;
+                    }
+                });
+
+            y.domain([d3.min(new_genData, function(d) {
+                    return d.Low;
+                }), d3.max(new_genData, function(d) {
+                    return d.High;
+                })]).nice();
+
+            // y.domain([minimal, maximal]).nice();
 
             // var barwidth = width / genData.length;
 
