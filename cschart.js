@@ -249,7 +249,7 @@ function cschart() {
             function zoomed() {                
                 var vis_startDomain = Date.parse(x.domain()[0]);
                 var vis_endDomain = Date.parse(x.domain()[1]);
-                svg.select(".xaxis").call(xAxis);
+                svg.select(".xaxis").call(xAxis);                
 
                 var new_genData = genData.filter(function(d){                                        
                         if(d.Date > vis_startDomain && d.Date <vis_endDomain){
