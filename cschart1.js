@@ -26,7 +26,7 @@ function cschart() {
                 .x(x)
                 .xExtent(d3.extent(genData, function(d) {                    
                     return d.Date
-                }))                
+                }))               
                 .on("zoom", zoomed);
             
             var bisectDate = d3.bisector(function(d) { return d.Date; }).left;
@@ -109,7 +109,8 @@ function cschart() {
             svg.append("g")
                 .attr("class", "axis grid")
                 .attr("transform", "translate(" + width + ",0)")
-                .call(yAxis.orient("left").tickFormat("").tickSize(width));            
+                // .call(yAxis.orient("left").tickFormat("").tickSize(width));            
+                .call(yAxis.orient("left").tickSize(width));            
 
             var bands = svg.selectAll(".bands")
                 .data([genData])
@@ -253,7 +254,7 @@ function cschart() {
                 var vis_startDomain = Date.parse(x.domain()[0]);
                 var vis_endDomain = Date.parse(x.domain()[1]);
                 svg.select(".xaxis").call(xAxis);                
-                // svg.select(".yaxis").call(yAxis);                
+                         
 
                 var new_genData = genData.filter(function(d){                                        
                         if(d.Date > vis_startDomain && d.Date <vis_endDomain){
@@ -266,6 +267,15 @@ function cschart() {
                 }), d3.max(new_genData, function(d) {
                     return d.High;
                 })]).nice();
+
+                y.domain([d3.min(new_genData, function(d) {
+                    return d.Low;
+                }), d3.max(new_genData, function(d) {
+                    return d.High;
+                })]).nice();
+
+                svg.select(".yaxis").call(yAxis.orient("right").tickSize(0));       
+                svg.select(".grid").call(yAxis.orient("left").tickSize(width));       
 
                 svg.selectAll('.candle').data(genData).attr("x", function(d) {
                     return x(d.Date) - candlewidth/2

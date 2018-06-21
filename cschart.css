@@ -12,8 +12,11 @@
     color: #fff;     
     margin: 10px auto;     
     height: 500px;
-    font-size: small;
+    font-size: 11px;
     text-align: center; }
+.grid text{
+    display: none;
+}
 /* Candlestick Chart
 /* =============================================== */
 #chart1 .grid { stroke-opacity: .3; }
