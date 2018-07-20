@@ -84,9 +84,7 @@ function cschart() {
             var valuelineema26 = d3.svg.line().x(function(d) {return x(d.Date);}).y(function(d) {return tmp_y(d['ema']);});
 
             d3.select(this).select("svg").remove();
-            var svg = d3.select(this).append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", Bheight + margin.top + margin.bottom)
+            var svg = d3.select(this).append("svg").attr('viewBox','0 0 '+(width + margin.left + margin.right) + ', '+ (Bheight + margin.top + margin.bottom))
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 

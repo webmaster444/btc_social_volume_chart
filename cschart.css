@@ -278,3 +278,27 @@ path.line{
     stroke: #333;
     stroke-width:1px;
 }
+
+@media screen and (max-width: 768px){
+    svg{
+        width: 100%;
+        height: auto;
+    }
+
+    #demobox{
+        min-width: inherit;
+        padding-left: 0;       
+    }   
+
+    #csbox{
+        height: auto;
+    }
+
+    fieldset{
+        padding: 0px;
+    }
+
+    ul.list-inline{
+        padding-left: 0;
+    }
+}
